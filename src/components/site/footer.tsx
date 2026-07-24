@@ -1,0 +1,87 @@
+import Link from "next/link";
+import { Landmark, MapPin, Phone, Mail, Clock } from "lucide-react";
+
+const LINKS = [
+  { href: "/", label: "Beranda" },
+  { href: "/berita", label: "Berita & Pengumuman" },
+  { href: "/data-penduduk", label: "Data Penduduk" },
+  { href: "/layanan-publik", label: "Layanan Publik" },
+  { href: "/peta-desa", label: "Peta Kelurahan" },
+];
+
+export function Footer() {
+  return (
+    <footer className="bg-ocean-900 text-neutral-100">
+      <div className="mx-auto grid max-w-[1120px] grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-10 px-6 py-16 pb-8">
+        <div>
+          <div className="mb-4 flex items-center gap-2.5">
+            {/* TODO: replace with uploads/Logo_Kel_Jagong-removebg-preview.png once the asset is added to public/images */}
+            <span className="flex size-[42px] items-center justify-center rounded-md bg-ocean-600">
+              <Landmark className="size-[21px] text-white" />
+            </span>
+            <span className="font-display text-lg font-semibold text-white">
+              Kelurahan Jagong
+            </span>
+          </div>
+          <p className="max-w-[34ch] text-sm leading-relaxed text-ocean-100">
+            Situs resmi Pemerintah Kelurahan Jagong, Kecamatan Pangkajene,
+            Kabupaten Pangkep, Sulawesi Selatan.
+          </p>
+        </div>
+
+        <div>
+          <h3 className="mb-4 text-xs tracking-wide text-ocean-300 uppercase">
+            Tautan
+          </h3>
+          <div className="flex flex-col gap-2.5">
+            {LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm text-ocean-200 no-underline hover:text-white hover:underline"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <h3 className="mb-4 text-xs tracking-wide text-ocean-300 uppercase">
+            Kontak
+          </h3>
+          <div className="flex flex-col gap-3">
+            <div className="flex items-start gap-2.5">
+              <MapPin className="mt-0.5 size-4 shrink-0 text-ocean-300" />
+              <span className="text-sm leading-relaxed text-ocean-100">
+                Kantor Kelurahan Jagong, Jl. Poros Kelurahan No. 1, Kec.
+                Pangkajene, Kab. Pangkep, Sulawesi Selatan 90611
+              </span>
+            </div>
+            <div className="flex items-center gap-2.5">
+              <Phone className="size-4 shrink-0 text-ocean-300" />
+              <span className="text-sm text-ocean-100">(0410) 000-000</span>
+            </div>
+            <div className="flex items-center gap-2.5">
+              <Mail className="size-4 shrink-0 text-ocean-300" />
+              <span className="text-sm text-ocean-100">
+                kelurahanjagong@pangkepkab.go.id
+              </span>
+            </div>
+            <div className="flex items-start gap-2.5">
+              <Clock className="mt-0.5 size-4 shrink-0 text-ocean-300" />
+              <span className="text-sm leading-relaxed text-ocean-100">
+                Senin–Jumat, 08.00–16.00 WITA
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="border-t border-ocean-800 px-6 py-5 text-center">
+        <p className="text-[13px] text-ocean-300">
+          © 2026 Pemerintah Kelurahan Jagong. Hak cipta dilindungi.
+        </p>
+      </div>
+    </footer>
+  );
+}
