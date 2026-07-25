@@ -177,3 +177,46 @@
     @apply font-display;
   }
 }
+
+@keyframes marquee-left {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-left {
+  animation: marquee-left linear infinite;
+}
+
+.animate-marquee-left:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-left {
+    animation: none;
+  }
+}
+
+.staff-card {
+  transition:
+    transform 300ms ease,
+    opacity 300ms ease,
+    filter 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.staff-track:has(.staff-card:hover) .staff-card:not(:hover) {
+  opacity: 0.3;
+  filter: blur(3px);
+  transform: scale(0.97);
+}
+
+.staff-card:hover {
+  transform: scale(1.08);
+  box-shadow: 0 20px 40px -12px rgb(7 90 112 / 0.35);
+  z-index: 10;
+}

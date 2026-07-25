@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   Megaphone,
@@ -62,20 +63,30 @@ const MISSION_ITEMS = [
   "Menjaga kelestarian lingkungan dan sumber daya alam kelurahan.",
 ];
 
-const KASI_LIST = [
+const STAFF = [
   {
-    title: "Kasi Pemerintahan",
+    name: "Elvira Septia Ansar, S.STP",
+    role: "Lurah",
+    nip: "NIP. 19920923 201609 2 001",
+  },
+  {
+    name: "Sultan, S.IP",
+    role: "Sekretaris",
+    nip: "NIP. 19740325 200903 1 004",
+  },
+  {
     name: "Aisyah Intang, S.Sos",
+    role: "Kasi Pemerintahan",
     nip: "NIP. 19710725 200701 2 016",
   },
   {
-    title: "Kasi Kesos",
     name: "Patmawati, S.Sos",
+    role: "Kasi Kesos",
     nip: "NIP. 1976065 200701 2 029",
   },
   {
-    title: "Kasi Pembangunan",
     name: "Nurmi, SM",
+    role: "Kasi Pembangunan",
     nip: "NIP. 19721225 200801 2 012",
   },
 ];
@@ -331,97 +342,56 @@ export default function Home() {
           Struktur Organisasi Kelurahan Jagong.
         </p>
 
-        <div className="flex flex-col items-center">
-          {/* Lurah */}
-          <div className="rounded-md bg-ocean-700 px-8 py-4 text-center text-white">
-            <div className="text-[15px] font-semibold">Lurah</div>
-            <div className="mt-0.5 text-[13px] text-ocean-100">
-              Elvira Septia Ansar, S.STP
-            </div>
-            <div className="mt-0.5 font-mono text-[11px] text-ocean-200">
-              NIP. 19920923 201609 2 001
-            </div>
-          </div>
-          <div className="h-[22px] w-px bg-border-strong" />
+        {/* Diagram sebagai gambar — jika struktur berubah, cukup ganti file
+            public/images/Struktur/Struktur_Organisasi_Kelurahan.jpg */}
+        <div className="overflow-x-auto rounded-lg border border-border-default bg-surface-card p-4 sm:p-8">
+          <Image
+            src="/images/Struktur/Struktur_Organisasi_Kelurahan.jpg"
+            alt="Bagan Struktur Organisasi Kelurahan Jagong"
+            width={1348}
+            height={531}
+            className="h-auto w-full min-w-[640px]"
+          />
+        </div>
+      </section>
 
-          {/* LPM | Sekretaris — mobile: simple stacked chain */}
-          <div className="flex w-full max-w-[480px] flex-col items-center sm:hidden">
-            <div className="rounded-md border border-dashed border-border-strong px-6 py-3 text-center whitespace-nowrap">
-              <div className="text-[15px] font-semibold text-text-primary">
-                LPM
-              </div>
-            </div>
-            <div className="h-4 w-px bg-border-strong" />
-            <div className="rounded-md border border-border-default bg-surface-sunken px-6 py-3 text-center whitespace-nowrap">
-              <div className="text-sm font-semibold text-text-primary">
-                Sekretaris
-              </div>
-              <div className="mt-0.5 text-xs text-text-muted">
-                Sultan, S.IP
-              </div>
-              <div className="mt-0.5 font-mono text-[11px] text-text-muted">
-                NIP. 19740325 200903 1 004
-              </div>
-            </div>
-          </div>
+      {/* Perangkat Kelurahan */}
+      <section className="mx-auto max-w-[1120px] px-6 pt-16">
+        <h2 className="mb-2 text-2xl text-text-primary">
+          Perangkat Kelurahan
+        </h2>
+        <p className="mb-8 text-sm text-text-muted">
+          Jajaran pejabat dan staf Kelurahan Jagong.
+        </p>
 
-          {/* LPM | Sekretaris — desktop: branch line + drop stubs, top-aligned so box-height differences can't skew the joint */}
-          <div className="relative hidden w-full max-w-[480px] sm:block">
-            <div className="absolute top-0 left-1/4 w-1/4 border-t border-dashed border-border-strong" />
-            <div className="absolute top-0 right-1/4 w-1/4 border-t border-border-strong" />
-            <div className="absolute top-0 bottom-0 left-1/2 w-px -translate-x-1/2 bg-border-strong" />
-            <div className="grid grid-cols-2">
-              <div className="flex flex-col items-center">
-                <div className="h-4 w-0 border-l border-dashed border-border-strong" />
-                <div className="rounded-md border border-dashed border-border-strong px-6 py-3 text-center whitespace-nowrap">
-                  <div className="text-[15px] font-semibold text-text-primary">
-                    LPM
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="h-4 w-0 border-l border-border-strong" />
-                <div className="rounded-md border border-border-default bg-surface-sunken px-6 py-3 text-center whitespace-nowrap">
+        <div className="overflow-hidden py-4">
+          <div
+            className="staff-track animate-marquee-left flex w-max gap-6"
+            style={{ animationDuration: `${STAFF.length * 4}s` }}
+          >
+            {[...STAFF, ...STAFF].map((person, i) => (
+              <div
+                key={i}
+                aria-hidden={i >= STAFF.length}
+                className="staff-card flex w-[220px] shrink-0 flex-col overflow-hidden rounded-lg border border-border-default bg-surface-card sm:w-[250px]"
+              >
+                <ImagePlaceholder
+                  label="Foto staf"
+                  className="h-[180px] w-full"
+                />
+                <div className="p-4 text-center">
                   <div className="text-sm font-semibold text-text-primary">
-                    Sekretaris
+                    {person.name}
                   </div>
-                  <div className="mt-0.5 text-xs text-text-muted">
-                    Sultan, S.IP
+                  <div className="mt-1 text-xs font-medium text-ocean-700">
+                    {person.role}
                   </div>
-                  <div className="mt-0.5 font-mono text-[11px] text-text-muted">
-                    NIP. 19740325 200903 1 004
+                  <div className="mt-1 font-mono text-[10.5px] text-text-muted">
+                    {person.nip}
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div className="h-[22px] w-px bg-border-strong" />
-
-          {/* Kasi row */}
-          <div className="relative w-full max-w-[720px]">
-            <div className="absolute top-0 left-[calc((100%-2rem)/6)] right-[calc((100%-2rem)/6)] hidden border-t border-border-strong sm:block" />
-            <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-              {KASI_LIST.map((kasi) => (
-                <div
-                  key={kasi.title}
-                  className="relative w-full max-w-[280px] pt-[22px] sm:max-w-none sm:min-w-[170px] sm:flex-1"
-                >
-                  <div className="absolute top-0 left-1/2 h-[22px] w-px -translate-x-1/2 bg-border-strong" />
-                  <div className="rounded-md border border-border-default bg-surface-card p-4 text-center">
-                    <div className="text-sm font-semibold text-text-primary">
-                      {kasi.title}
-                    </div>
-                    <div className="mt-1 text-xs text-text-muted">
-                      {kasi.name}
-                    </div>
-                    <div className="mt-0.5 font-mono text-[10.5px] text-text-muted">
-                      {kasi.nip}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
       </section>
