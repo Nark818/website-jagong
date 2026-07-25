@@ -369,6 +369,7 @@ export default function Home() {
           <div className="relative hidden w-full max-w-[480px] sm:block">
             <div className="absolute top-0 left-1/4 w-1/4 border-t border-dashed border-border-strong" />
             <div className="absolute top-0 right-1/4 w-1/4 border-t border-border-strong" />
+            <div className="absolute top-0 bottom-0 left-1/2 w-px -translate-x-1/2 bg-border-strong" />
             <div className="grid grid-cols-2">
               <div className="flex flex-col items-center">
                 <div className="h-4 w-0 border-l border-dashed border-border-strong" />
@@ -398,8 +399,8 @@ export default function Home() {
           <div className="h-[22px] w-px bg-border-strong" />
 
           {/* Kasi row */}
-          <div className="relative w-full max-w-[720px] pt-0 sm:pt-[22px]">
-            <div className="absolute top-0 left-[16.6%] right-[16.6%] hidden border-t border-border-strong sm:block" />
+          <div className="relative w-full max-w-[720px]">
+            <div className="absolute top-0 left-[calc((100%-2rem)/6)] right-[calc((100%-2rem)/6)] hidden border-t border-border-strong sm:block" />
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               {KASI_LIST.map((kasi) => (
                 <div

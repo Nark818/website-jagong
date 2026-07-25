@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Landmark, MapPin, Phone, Mail, Clock } from "lucide-react";
+import Image from "next/image";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 
 const LINKS = [
   { href: "/", label: "Beranda" },
@@ -15,10 +16,13 @@ export function Footer() {
       <div className="mx-auto grid max-w-[1120px] grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-10 px-6 py-16 pb-8">
         <div>
           <div className="mb-4 flex items-center gap-2.5">
-            {/* TODO: replace with uploads/Logo_Kel_Jagong-removebg-preview.png once the asset is added to public/images */}
-            <span className="flex size-[42px] items-center justify-center rounded-md bg-ocean-600">
-              <Landmark className="size-[21px] text-white" />
-            </span>
+            <Image
+              src="/images/Logo/Logo_Kelurahan_Jagong.png"
+              alt="Lambang Kelurahan Jagong"
+              width={42}
+              height={42}
+              className="size-[42px] rounded-md object-contain"
+            />
             <span className="font-display text-lg font-semibold text-white">
               Kelurahan Jagong
             </span>
