@@ -1,13 +1,10 @@
 import Link from "next/link";
-import Image from "next/image";
 import {
   ArrowRight,
   Megaphone,
   BarChart3,
   FileText,
   MapPin,
-  Target,
-  CheckCircle2,
 } from "lucide-react";
 import { ImagePlaceholder } from "@/components/site/image-placeholder";
 import { HeroCarousel } from "@/components/site/hero-carousel";
@@ -54,13 +51,6 @@ const QUICK_LINKS = [
     icon: MapPin,
     tone: "ocean" as const,
   },
-];
-
-const MISSION_ITEMS = [
-  "Meningkatkan kualitas pelayanan publik yang cepat dan transparan.",
-  "Mendorong pertumbuhan ekonomi kelurahan berbasis potensi lokal.",
-  "Memperkuat partisipasi warga dalam pembangunan kelurahan.",
-  "Menjaga kelestarian lingkungan dan sumber daya alam kelurahan.",
 ];
 
 const STAFF = [
@@ -156,12 +146,12 @@ export default function Home() {
             >
               Ajukan Layanan <ArrowRight className="size-[18px]" />
             </Link>
-            <a
-              href="#profil"
+            <Link
+              href="/profil"
               className="inline-flex items-center gap-2 rounded-sm border border-white/50 bg-white/10 px-[22px] py-[13px] font-semibold text-white no-underline hover:bg-white/20"
             >
               Profil Kelurahan
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -200,12 +190,12 @@ export default function Home() {
             <h2 className="mt-3 mb-4 text-[clamp(26px,3.5vw,34px)] text-text-primary">
               Selamat datang di Kelurahan Jagong
             </h2>
-            <p className="mb-3 text-[18px] leading-[1.7] text-text-secondary">
+            <p className="mb-3 text-justify text-[18px] leading-[1.7] text-text-secondary">
               Kami berkomitmen menghadirkan pemerintahan kelurahan yang
               terbuka dan mudah diakses oleh seluruh warga, kapan pun
               dibutuhkan.
             </p>
-            <p className="text-[18px] leading-[1.7] text-text-secondary">
+            <p className="text-justify text-[18px] leading-[1.7] text-text-secondary">
               Melalui situs ini, warga dapat mengakses informasi kelurahan,
               data kependudukan, dan mengajukan surat layanan tanpa harus
               menunggu lama di kantor kelurahan.
@@ -266,107 +256,30 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Profil Kelurahan (Sejarah, Visi & Misi, Struktur Pemerintahan) */}
-      <section id="profil" className="mx-auto max-w-[1120px] px-6 pt-20">
-        <span className="text-[13px] font-semibold tracking-wide text-forest-600 uppercase">
-          Profil Kelurahan
-        </span>
-        <div className="mt-3 grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(280px,1fr)]">
-          <div>
-            <h2 className="mb-4 text-[clamp(24px,3vw,30px)] text-text-primary">
-              Sejarah Kelurahan
-            </h2>
-            <p className="mb-4 text-[18px] leading-[1.75] text-text-secondary">
-              Kelurahan Jagong terbentuk dari beberapa dusun yang bergabung
-              menjadi satu wilayah administratif di Kecamatan Pangkajene.
-              Nama &ldquo;Jagong&rdquo; berasal dari kebiasaan warga
-              bermusyawarah di bawah pohon besar di tengah kelurahan. (Teks
-              contoh — akan diperbarui dengan sejarah resmi kelurahan.)
-            </p>
-            <p className="text-[18px] leading-[1.75] text-text-secondary">
-              Sejak dimekarkan, Kelurahan Jagong berkembang sebagai kawasan
-              agraris dengan mata pencaharian utama warga di bidang
-              pertanian, perikanan tambak, dan perdagangan hasil bumi.
-            </p>
-          </div>
-          <ImagePlaceholder
-            label="Foto arsip kelurahan (contoh)"
-            className="h-[300px] w-full rounded-lg"
-          />
-        </div>
-      </section>
-
-      {/* Visi & Misi */}
-      <section className="mx-auto max-w-[1120px] px-6 pt-16">
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
-          <div className="rounded-lg border border-border-default bg-surface-card p-8">
-            <div className="mb-4 flex items-center gap-2.5">
-              <span className="flex size-9 items-center justify-center rounded-sm bg-ocean-50">
-                <Target className="size-[18px] text-ocean-700" />
-              </span>
-              <h3 className="m-0 text-[19px] text-text-primary">Visi</h3>
-            </div>
-            <p className="m-0 text-[15px] leading-[1.7] text-text-secondary italic">
-              &ldquo;Mewujudkan Kelurahan Jagong yang mandiri, sejahtera, dan
-              berbudaya melalui tata kelola pemerintahan yang transparan dan
-              partisipatif.&rdquo; (contoh)
-            </p>
-          </div>
-          <div className="rounded-lg border border-border-default bg-surface-card p-8">
-            <div className="mb-4 flex items-center gap-2.5">
-              <span className="flex size-9 items-center justify-center rounded-sm bg-forest-50">
-                <CheckCircle2 className="size-[18px] text-forest-700" />
-              </span>
-              <h3 className="m-0 text-[19px] text-text-primary">Misi</h3>
-            </div>
-            <ul className="m-0 flex flex-col gap-2 pl-5">
-              {MISSION_ITEMS.map((item) => (
-                <li
-                  key={item}
-                  className="text-[15px] leading-[1.6] text-text-secondary"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Struktur Pemerintahan */}
-      <section className="mx-auto max-w-[1120px] px-6 pt-16">
-        <h2 className="mb-2 text-2xl text-text-primary">
-          Struktur Pemerintahan
-        </h2>
-        <p className="mb-8 text-sm text-text-muted">
-          Struktur Organisasi Kelurahan Jagong.
-        </p>
-
-        {/* Diagram sebagai gambar — jika struktur berubah, cukup ganti file
-            public/images/Struktur/Struktur_Organisasi_Kelurahan.jpg */}
-        <div className="overflow-x-auto rounded-lg border border-border-default bg-surface-card p-4 sm:p-8">
-          <Image
-            src="/images/Struktur/Struktur_Organisasi_Kelurahan.jpg"
-            alt="Bagan Struktur Organisasi Kelurahan Jagong"
-            width={1348}
-            height={531}
-            className="h-auto w-full min-w-[640px]"
-          />
-        </div>
-      </section>
-
       {/* Perangkat Kelurahan */}
-      <section className="mx-auto max-w-[1120px] px-6 pt-16">
-        <h2 className="mb-2 text-2xl text-text-primary">
-          Perangkat Kelurahan
-        </h2>
-        <p className="mb-8 text-sm text-text-muted">
-          Jajaran pejabat dan staf Kelurahan Jagong.
-        </p>
+      <section className="pt-16">
+        <div className="mx-auto max-w-[1120px] px-6">
+          <div className="mb-8 flex flex-wrap items-baseline justify-between gap-4">
+            <div>
+              <h2 className="m-0 mb-2 text-2xl text-text-primary">
+                Perangkat Kelurahan
+              </h2>
+              <p className="m-0 text-sm text-text-muted">
+                Jajaran pejabat dan staf Kelurahan Jagong.
+              </p>
+            </div>
+            <Link
+              href="/profil"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-ocean-700 no-underline hover:underline"
+            >
+              Profil Kelurahan <ArrowRight className="size-[15px]" />
+            </Link>
+          </div>
+        </div>
 
-        <div className="overflow-hidden py-4">
+        <div className="staff-fade overflow-hidden py-4">
           <div
-            className="staff-track animate-marquee-left flex w-max gap-6"
+            className="staff-track animate-marquee-left flex w-max gap-6 px-6"
             style={{ animationDuration: `${STAFF.length * 4}s` }}
           >
             {[...STAFF, ...STAFF].map((person, i) => (
@@ -398,12 +311,22 @@ export default function Home() {
 
       {/* Galeri Kelurahan */}
       <section className="mx-auto max-w-[1120px] px-6 py-20">
-        <h2 className="mb-2 text-[clamp(24px,3vw,30px)] text-text-primary">
-          Galeri Kelurahan
-        </h2>
-        <p className="mb-8 text-sm text-text-muted">
-          Foto akan diperbarui dengan dokumentasi resmi kelurahan.
-        </p>
+        <div className="mb-8 flex flex-wrap items-baseline justify-between gap-4">
+          <div>
+            <h2 className="m-0 mb-2 text-[clamp(24px,3vw,30px)] text-text-primary">
+              Galeri Kelurahan
+            </h2>
+            <p className="m-0 text-sm text-text-muted">
+              Foto akan diperbarui dengan dokumentasi resmi kelurahan.
+            </p>
+          </div>
+          <Link
+            href="/profil/galeri"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-ocean-700 no-underline hover:underline"
+          >
+            Lihat galeri lengkap <ArrowRight className="size-[15px]" />
+          </Link>
+        </div>
         <div className="grid grid-cols-2 grid-rows-4 gap-4 sm:grid-cols-4 sm:grid-rows-2">
           {GALLERY.map((label) => (
             <ImagePlaceholder

@@ -201,6 +201,23 @@
   }
 }
 
+.staff-fade {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black clamp(24px, 6vw, 96px),
+    black calc(100% - clamp(24px, 6vw, 96px)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black clamp(24px, 6vw, 96px),
+    black calc(100% - clamp(24px, 6vw, 96px)),
+    transparent
+  );
+}
+
 .staff-card {
   transition:
     transform 300ms ease,
