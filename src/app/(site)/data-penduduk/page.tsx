@@ -1,6 +1,6 @@
 import { Info, Users, Home, User } from "lucide-react";
 import { PageHeader } from "@/components/site/page-header";
-import { DonutChart, RadialProgress } from "@/components/site/donut-chart";
+import { DonutChart, PercentRing } from "@/components/site/donut-chart";
 
 const fmt = (n: number) => n.toLocaleString("id-ID");
 
@@ -216,19 +216,6 @@ export default function DataPendudukPage() {
           diterbitkan.
         </p>
 
-        <div className="mb-6 flex flex-wrap gap-8 rounded-lg border border-border-default bg-surface-card p-6 sm:p-8">
-          <RadialProgress
-            value={parseFloat(pctRealisasi.replace(",", "."))}
-            color="#0891B2"
-            label="Persentase Realisasi PBB s/d Juni 2026"
-          />
-          <RadialProgress
-            value={parseFloat(pctPenerimaan.replace(",", "."))}
-            color="#1F8347"
-            label="Persentase Jumlah Penerimaan"
-          />
-        </div>
-
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
           <div className="overflow-hidden rounded-lg border border-border-default bg-surface-card">
             <div className="border-b border-border-default bg-surface-sunken px-5 py-3.5">
@@ -259,13 +246,13 @@ export default function DataPendudukPage() {
               bold
               highlight="ocean"
             />
-            <div className="flex items-center justify-between border-t border-border-default bg-ocean-50 px-5 py-3">
-              <span className="text-[12.5px] font-medium text-ocean-800">
+            <div className="grid grid-cols-[1.4fr_0.8fr_1.1fr] items-center border-t border-border-default bg-ocean-50">
+              <span className="col-span-2 px-5 py-3 text-[12.5px] font-medium text-ocean-800">
                 Persentase realisasi terhadap pokok
               </span>
-              <span className="font-mono text-sm font-semibold text-ocean-800">
-                {pctRealisasi}%
-              </span>
+              <div className="flex justify-center px-2 py-2">
+                <PercentRing value={parseFloat(pctRealisasi.replace(",", "."))} color="#0891B2" />
+              </div>
             </div>
           </div>
 
@@ -299,13 +286,13 @@ export default function DataPendudukPage() {
               bold
               highlight="forest"
             />
-            <div className="flex items-center justify-between border-t border-border-default bg-forest-50 px-5 py-3">
-              <span className="text-[12.5px] font-medium text-forest-800">
+            <div className="grid grid-cols-[1.4fr_0.8fr_1.1fr] items-center border-t border-border-default bg-forest-50">
+              <span className="col-span-2 px-5 py-3 text-[12.5px] font-medium text-forest-800">
                 Persentase penagihan terhadap tunggakan
               </span>
-              <span className="font-mono text-sm font-semibold text-forest-800">
-                {((tdSdIni.rp / tunggakan.rp) * 100).toFixed(2).replace(".", ",")}%
-              </span>
+              <div className="flex justify-center px-2 py-2">
+                <PercentRing value={(tdSdIni.rp / tunggakan.rp) * 100} color="#1F8347" />
+              </div>
             </div>
           </div>
         </div>

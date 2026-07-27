@@ -71,18 +71,17 @@ export function DonutChart({
   );
 }
 
-export function RadialProgress({
+/** Compact ring showing a single percentage against its remainder — for inline use next to a label. */
+export function PercentRing({
   value,
-  size = 100,
-  thickness = 10,
   color,
-  label,
+  size = 80,
+  thickness = 10,
 }: {
   value: number;
+  color: string;
   size?: number;
   thickness?: number;
-  color: string;
-  label: string;
 }) {
   const radius = (size - thickness) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -90,42 +89,32 @@ export function RadialProgress({
   const dash = (clamped / 100) * circumference;
 
   return (
-    <div className="flex flex-col items-center gap-3 text-center">
-      <div
-        className="relative inline-flex items-center justify-center"
-        style={{ width: size, height: size }}
-      >
-        <svg
-          width={size}
-          height={size}
-          viewBox={`0 0 ${size} ${size}`}
-          className="-rotate-90"
-        >
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            fill="none"
-            stroke="var(--color-border-default)"
-            strokeWidth={thickness}
-          />
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            fill="none"
-            stroke={color}
-            strokeWidth={thickness}
-            strokeDasharray={`${dash} ${circumference - dash}`}
-            strokeLinecap="round"
-          />
-        </svg>
-        <span className="absolute font-mono text-lg font-semibold text-text-primary">
-          {clamped.toFixed(2).replace(".", ",")}%
-        </span>
-      </div>
-      <span className="max-w-[16ch] text-[13px] leading-snug text-text-secondary">
-        {label}
+    <div
+      className="relative inline-flex shrink-0 items-center justify-center"
+      style={{ width: size, height: size }}
+    >
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="-rotate-90">
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="var(--color-border-default)"
+          strokeWidth={thickness}
+        />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke={color}
+          strokeWidth={thickness}
+          strokeDasharray={`${dash} ${circumference - dash}`}
+          strokeLinecap="round"
+        />
+      </svg>
+      <span className="absolute font-mono text-sm font-semibold text-text-primary">
+        {clamped.toFixed(1).replace(".", ",")}%
       </span>
     </div>
   );

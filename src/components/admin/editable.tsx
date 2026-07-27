@@ -84,7 +84,7 @@ export function EditableText({
       }}
       title="Klik untuk edit"
       className={cn(
-        "-mx-1 cursor-text rounded-sm px-1 outline-dashed outline-1 outline-transparent transition-colors hover:bg-ocean-50/70 hover:outline-ocean-300",
+        "-mx-1 cursor-text rounded-sm px-1 break-words outline-dashed outline-1 outline-transparent transition-colors hover:bg-ocean-50/70 hover:outline-ocean-300",
         className,
       )}
     >

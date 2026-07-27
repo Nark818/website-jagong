@@ -622,7 +622,7 @@ export default function AdminPanel() {
                     onPhotoChange={(url) => updateBerita(i, { photo: url })}
                     className="h-[160px] w-full shrink-0 sm:h-auto sm:w-[220px]"
                   />
-                  <div className="flex flex-1 flex-col gap-2.5 p-5">
+                  <div className="flex min-w-0 flex-1 flex-col gap-2.5 p-5">
                     <div className="flex items-center justify-between gap-3">
                       <select
                         value={b.cat}
