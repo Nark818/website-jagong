@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { ArrowRight, FileText, AlertCircle, CheckCircle2, Send, Clock, Phone } from "lucide-react";
+import { ArrowRight, FileText, AlertCircle, CheckCircle2, Send, Clock } from "lucide-react";
 import { PageHeader } from "@/components/site/page-header";
 
 const SERVICES = [
@@ -310,19 +310,15 @@ export default function LayananPublikPage() {
             </div>
             <div className="rounded-lg border border-border-default bg-surface-card p-6">
               <h3 className="mb-4 text-[15px] font-semibold text-text-primary">
-                Jam & kontak layanan
+                Jam layanan
               </h3>
               <div className="flex flex-col gap-2.5">
                 <div className="flex items-start gap-2.5">
                   <Clock className="mt-0.5 size-[15px] shrink-0 text-ocean-600" />
                   <span className="text-[13px] leading-relaxed text-text-secondary">
-                    Senin–Jumat, 08.00–16.00 WITA
-                  </span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <Phone className="mt-0.5 size-[15px] shrink-0 text-ocean-600" />
-                  <span className="text-[13px] leading-relaxed text-text-secondary">
-                    (0410) 000-000
+                    Senin–Kamis, 08.00–16.00 WITA
+                    <br />
+                    Jumat, 08.00–16.30 WITA
                   </span>
                 </div>
               </div>

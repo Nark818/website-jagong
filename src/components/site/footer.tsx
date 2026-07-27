@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { MapPin, Mail, Clock } from "lucide-react";
 
 const LINKS = [
   { href: "/", label: "Beranda" },
@@ -58,24 +58,19 @@ export function Footer() {
             <div className="flex items-start gap-2.5">
               <MapPin className="mt-0.5 size-4 shrink-0 text-ocean-300" />
               <span className="text-sm leading-relaxed text-ocean-100">
-                Kantor Kelurahan Jagong, Jl. Poros Kelurahan No. 1, Kec.
-                Pangkajene, Kab. Pangkep, Sulawesi Selatan 90611
+                Jl. Pelelangan, Kel. Jagong, Kec. Pangkep, Sulawesi Selatan
               </span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <Phone className="size-4 shrink-0 text-ocean-300" />
-              <span className="text-sm text-ocean-100">(0410) 000-000</span>
             </div>
             <div className="flex items-center gap-2.5">
               <Mail className="size-4 shrink-0 text-ocean-300" />
-              <span className="text-sm text-ocean-100">
-                kelurahanjagong@pangkepkab.go.id
-              </span>
+              <span className="text-sm text-ocean-100">jagong2025@g.mail</span>
             </div>
             <div className="flex items-start gap-2.5">
               <Clock className="mt-0.5 size-4 shrink-0 text-ocean-300" />
               <span className="text-sm leading-relaxed text-ocean-100">
-                Senin–Jumat, 08.00–16.00 WITA
+                Senin–Kamis, 08.00–16.00 WITA
+                <br />
+                Jumat, 08.00–16.30 WITA
               </span>
             </div>
           </div>
