@@ -126,7 +126,7 @@ export function TextField({
         {label}
       </label>
       <input
-        className="rounded-sm border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary"
+        className="rounded-sm border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none focus:border-ocean-500 focus:ring-2 focus:ring-ocean-200"
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}

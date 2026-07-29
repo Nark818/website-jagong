@@ -27,7 +27,7 @@ export function LayananSection({
     try {
       const row = await createServiceType({ title: "Layanan baru", sort_order: services.length });
       setServices((rows) => [...rows, row]);
-      notify(true);
+      notify(true, "Layanan baru ditambahkan.", "add");
     } catch {
       notify(false, "Gagal menambah layanan.");
     }
@@ -37,7 +37,7 @@ export function LayananSection({
     setServices((rows) => rows.filter((r) => r.id !== id));
     try {
       await deleteServiceType(id);
-      notify(true);
+      notify(true, "Layanan dihapus.", "delete");
     } catch {
       notify(false, "Gagal menghapus layanan.");
     }
@@ -45,6 +45,7 @@ export function LayananSection({
 
   return (
     <div className="flex flex-col gap-5">
+      <AddRowButton onClick={addService} label="Tambah layanan" />
       {services.map((svc) => (
         <div
           key={svc.id}
@@ -74,12 +75,11 @@ export function LayananSection({
                     .filter(Boolean),
                 })
               }
-              className="w-full resize-y rounded-sm border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary"
+              className="w-full resize-y rounded-sm border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none focus:border-ocean-500 focus:ring-2 focus:ring-ocean-200"
             />
           </div>
         </div>
       ))}
-      <AddRowButton onClick={addService} label="Tambah layanan" />
     </div>
   );
 }

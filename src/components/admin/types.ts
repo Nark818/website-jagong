@@ -1,6 +1,7 @@
 import type {
   getContentBlocks,
   getGalleryItems,
+  getHeroSlides,
   getMapBoundaries,
   getNewsPosts,
   getPopulationSnapshot,
@@ -12,6 +13,7 @@ import type {
 } from "@/lib/supabase/queries";
 
 export type ContentMap = Awaited<ReturnType<typeof getContentBlocks>>;
+export type HeroSlideRow = Awaited<ReturnType<typeof getHeroSlides>>[number];
 export type StaffRow = Awaited<ReturnType<typeof getStaff>>[number];
 export type GalleryRow = Awaited<ReturnType<typeof getGalleryItems>>[number];
 export type NewsRow = Awaited<ReturnType<typeof getNewsPosts>>[number];
@@ -24,6 +26,7 @@ export type TaxMonthRow = Awaited<ReturnType<typeof getTaxMonthlyRealizations>>[
 
 export type AdminInitialData = {
   content: ContentMap;
+  heroSlides: HeroSlideRow[];
   staff: StaffRow[];
   gallery: GalleryRow[];
   news: NewsRow[];
@@ -36,4 +39,4 @@ export type AdminInitialData = {
   taxMonths: TaxMonthRow[];
 };
 
-export type Notify = (ok: boolean, message?: string) => void;
+export type Notify = (ok: boolean, message?: string, variant?: "add" | "delete") => void;

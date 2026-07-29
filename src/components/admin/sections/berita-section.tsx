@@ -28,7 +28,7 @@ export function BeritaSection({ news: initial, notify }: { news: NewsRow[]; noti
         published_at: new Date().toISOString(),
       });
       setNews((items) => [row, ...items]);
-      notify(true);
+      notify(true, "Berita baru ditambahkan.", "add");
     } catch {
       notify(false, "Gagal menambah berita.");
     }
@@ -38,7 +38,7 @@ export function BeritaSection({ news: initial, notify }: { news: NewsRow[]; noti
     setNews((items) => items.filter((item) => item.id !== id));
     try {
       await deleteNewsPost(id);
-      notify(true);
+      notify(true, "Berita dihapus.", "delete");
     } catch {
       notify(false, "Gagal menghapus berita.");
     }
@@ -46,6 +46,7 @@ export function BeritaSection({ news: initial, notify }: { news: NewsRow[]; noti
 
   return (
     <div className="flex flex-col gap-5">
+      <AddRowButton onClick={addPost} label="Tambah Berita/Pengumuman" />
       {news.map((post) => (
         <div
           key={post.id}
@@ -104,7 +105,7 @@ export function BeritaSection({ news: initial, notify }: { news: NewsRow[]; noti
                   if (!e.target.value) return;
                   save(post.id, { published_at: new Date(e.target.value).toISOString() });
                 }}
-                className="rounded-sm border border-border-default bg-surface-card px-2 py-1 text-xs font-medium text-text-primary"
+                className="rounded-sm border border-border-default bg-surface-card px-2 py-1 text-xs font-medium text-text-primary outline-none focus:border-ocean-500 focus:ring-2 focus:ring-ocean-200"
               />
             </div>
             <div className="mt-1 border-t border-border-default pt-2.5">
@@ -123,7 +124,6 @@ export function BeritaSection({ news: initial, notify }: { news: NewsRow[]; noti
           </div>
         </div>
       ))}
-      <AddRowButton onClick={addPost} label="Tambah Berita/Pengumuman" />
     </div>
   );
 }

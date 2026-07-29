@@ -27,7 +27,7 @@ function NumberCell({
   const [draft, setDraft] = useState(String(value));
   return (
     <input
-      className="rounded-sm border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary"
+      className="w-full min-w-0 rounded-sm border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none focus:border-ocean-500 focus:ring-2 focus:ring-ocean-200"
       value={draft}
       placeholder={placeholder}
       inputMode="numeric"
@@ -52,7 +52,7 @@ function TextCell({
   const [draft, setDraft] = useState(value);
   return (
     <input
-      className="rounded-sm border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary"
+      className="w-full min-w-0 rounded-sm border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none focus:border-ocean-500 focus:ring-2 focus:ring-ocean-200"
       value={draft}
       placeholder={placeholder}
       onChange={(e) => setDraft(e.target.value)}
@@ -125,7 +125,7 @@ export function PendudukSection({
     try {
       const row = await createRwArea({ name: `RW 0${rwAreas.length + 1}`, sort_order: rwAreas.length });
       setRwAreas((rows) => [...rows, row]);
-      notify(true);
+      notify(true, "RW baru ditambahkan.", "add");
     } catch {
       notify(false, "Gagal menambah RW.");
     }
@@ -135,7 +135,7 @@ export function PendudukSection({
     setRwAreas((rows) => rows.filter((r) => r.id !== id));
     try {
       await deleteRwArea(id);
-      notify(true);
+      notify(true, "RW dihapus.", "delete");
     } catch {
       notify(false, "Gagal menghapus RW.");
     }
@@ -171,7 +171,7 @@ export function PendudukSection({
     try {
       const row = await createTaxMonth({ year: taxYear, month: nextMonth });
       setMonths((rows) => [...rows, row].sort((a, b) => a.month - b.month));
-      notify(true);
+      notify(true, "Bulan baru ditambahkan.", "add");
     } catch {
       notify(false, "Gagal menambah bulan.");
     }
@@ -181,7 +181,7 @@ export function PendudukSection({
     setMonths((rows) => rows.filter((m) => m.id !== id));
     try {
       await deleteTaxMonth(id);
-      notify(true);
+      notify(true, "Bulan dihapus.", "delete");
     } catch {
       notify(false, "Gagal menghapus bulan.");
     }
@@ -265,6 +265,7 @@ export function PendudukSection({
 
       <div className="flex flex-col gap-4 rounded-lg border border-border-default bg-surface-card p-6">
         <h2 className="m-0 text-base text-text-primary">Jumlah Rumah & Masjid per RW</h2>
+        <AddRowButton onClick={addRw} label="Tambah RW" />
         <div className="flex flex-col gap-2">
           {rwAreas.map((r) => (
             <div key={r.id} className="grid grid-cols-[1.2fr_1fr_1fr_auto] items-center gap-2">
@@ -283,7 +284,6 @@ export function PendudukSection({
             </div>
           ))}
         </div>
-        <AddRowButton onClick={addRw} label="Tambah RW" />
         <div className="flex gap-6 border-t border-border-default pt-2 text-[13px] text-text-muted">
           <span>
             Total rumah (otomatis): <strong className="font-mono text-text-primary">{totalRumah}</strong>
@@ -346,6 +346,9 @@ export function PendudukSection({
             ini — bulan dengan nomor tertinggi dianggap &ldquo;bulan
             ini&rdquo;.
           </p>
+          <div className="mb-3">
+            <AddRowButton onClick={addMonth} label="Tambah bulan" />
+          </div>
           <div className="flex flex-col gap-2">
             <div className="grid grid-cols-[80px_1fr_1fr_1fr_1fr_auto] gap-2 text-[11px] font-semibold tracking-wide text-text-muted uppercase">
               <span>Bulan</span>
@@ -371,9 +374,6 @@ export function PendudukSection({
                 <DeleteIconButton onClick={() => removeMonth(m.id)} label="Hapus bulan" />
               </div>
             ))}
-          </div>
-          <div className="mt-3">
-            <AddRowButton onClick={addMonth} label="Tambah bulan" />
           </div>
         </div>
       </div>

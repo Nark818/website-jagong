@@ -19,6 +19,15 @@ export async function getStaff() {
   return data ?? [];
 }
 
+export async function getHeroSlides() {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("hero_slides")
+    .select("id, photo_url, alt")
+    .order("sort_order", { ascending: true });
+  return data ?? [];
+}
+
 export async function getGalleryItems() {
   const supabase = await createClient();
   const { data } = await supabase

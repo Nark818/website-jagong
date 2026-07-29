@@ -4,6 +4,7 @@ import AdminPanel from "@/components/admin/admin-panel";
 import {
   getContentBlocks,
   getGalleryItems,
+  getHeroSlides,
   getMapBoundaries,
   getNewsPosts,
   getPopulationSnapshot,
@@ -25,6 +26,7 @@ export default async function AdminPage() {
 
   const [
     content,
+    heroSlides,
     staff,
     gallery,
     news,
@@ -36,6 +38,7 @@ export default async function AdminPage() {
     taxMonths,
   ] = await Promise.all([
     getContentBlocks(),
+    getHeroSlides(),
     getStaff(),
     getGalleryItems(),
     getNewsPosts(),
@@ -52,6 +55,7 @@ export default async function AdminPage() {
       userEmail={user.email ?? ""}
       initialData={{
         content,
+        heroSlides,
         staff,
         gallery,
         news,

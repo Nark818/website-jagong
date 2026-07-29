@@ -13,6 +13,7 @@ import { CAT_LABEL, TAG_CLASSES } from "@/lib/news";
 import { formatIndonesianDate } from "@/lib/format";
 import {
   getContentBlocks,
+  getHeroSlides,
   getStaff,
   getGalleryItems,
   getNewsPosts,
@@ -57,9 +58,10 @@ const TONE_CLASSES = {
 };
 
 export default async function Home() {
-  const [content, staff, gallery, news, population, rwAreas] =
+  const [content, heroSlides, staff, gallery, news, population, rwAreas] =
     await Promise.all([
       getContentBlocks(),
+      getHeroSlides(),
       getStaff(),
       getGalleryItems(),
       getNewsPosts(),
@@ -91,7 +93,7 @@ export default async function Home() {
     <main className="flex-1">
       {/* Hero */}
       <section className="relative flex min-h-screen items-stretch">
-        <HeroCarousel />
+        <HeroCarousel slides={heroSlides} />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ocean-900/55 to-ocean-900/80" />
         <div className="relative z-10 mx-auto flex w-full max-w-[1120px] flex-col justify-center gap-5 px-6 py-[clamp(64px,12vw,120px)] box-border pointer-events-none">
           <span className="inline-flex w-fit items-center gap-2 rounded-full border border-white/35 bg-white/[.14] px-3 py-[5px] text-xs font-semibold tracking-wide text-white uppercase">

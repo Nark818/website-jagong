@@ -110,9 +110,16 @@ export function EditableImage({
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleFile = async (file: File | undefined) => {
     if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setError("File harus berupa gambar (JPG, PNG, dll).");
+      window.setTimeout(() => setError(null), 3000);
+      return;
+    }
+    setError(null);
     setUploading(true);
     try {
       await onUpload(file);
@@ -157,12 +164,20 @@ export function EditableImage({
           {uploading ? "Mengunggah…" : "Ganti foto"}
         </span>
       </button>
+      {error && (
+        <div className="absolute inset-x-0 bottom-0 bg-[#DC2626] px-2 py-1.5 text-center text-[11px] font-medium text-white">
+          {error}
+        </div>
+      )}
       <input
         ref={inputRef}
         type="file"
         accept="image/*"
         className="hidden"
-        onChange={(e) => handleFile(e.target.files?.[0])}
+        onChange={(e) => {
+          handleFile(e.target.files?.[0]);
+          e.target.value = "";
+        }}
       />
     </div>
   );

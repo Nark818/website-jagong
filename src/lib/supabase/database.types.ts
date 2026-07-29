@@ -36,6 +36,7 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          instagram_url: string | null
           label: string
           photo_url: string | null
           sort_order: number
@@ -44,6 +45,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          instagram_url?: string | null
           label: string
           photo_url?: string | null
           sort_order?: number
@@ -52,7 +54,35 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          instagram_url?: string | null
           label?: string
+          photo_url?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      hero_slides: {
+        Row: {
+          alt: string
+          created_at: string
+          id: string
+          photo_url: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          alt?: string
+          created_at?: string
+          id?: string
+          photo_url?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          alt?: string
+          created_at?: string
+          id?: string
           photo_url?: string | null
           sort_order?: number
           updated_at?: string

@@ -1,4 +1,15 @@
-import { BarChart3, Image as ImageIcon, Megaphone, Plus, Upload, Users } from "lucide-react";
+import {
+  BarChart3,
+  Compass,
+  Home,
+  Image as ImageIcon,
+  Megaphone,
+  Phone,
+  Plus,
+  Upload,
+  Users,
+  Wrench,
+} from "lucide-react";
 import { StatTile, QuickAction } from "../ui";
 import type { AdminInitialData } from "../types";
 import type { SectionKey } from "../section-keys";
@@ -50,6 +61,30 @@ export function DashboardSection({
             title="Edit Statistik Penduduk"
             desc="Perbarui data penduduk, RW, dan realisasi pajak."
             onClick={() => goTo("penduduk")}
+          />
+          <QuickAction
+            icon={Home}
+            title="Edit Halaman Beranda"
+            desc="Ubah judul hero dan teks sambutan."
+            onClick={() => goTo("beranda")}
+          />
+          <QuickAction
+            icon={Wrench}
+            title="Edit Layanan Publik"
+            desc="Kelola jenis surat dan syarat pengajuan."
+            onClick={() => goTo("layanan")}
+          />
+          <QuickAction
+            icon={Compass}
+            title="Edit Peta Kelurahan"
+            desc="Perbarui nama kelurahan tetangga per arah mata angin."
+            onClick={() => goTo("peta")}
+          />
+          <QuickAction
+            icon={Phone}
+            title="Edit Kontak & Footer"
+            desc="Ubah alamat, email, dan jam layanan."
+            onClick={() => goTo("kontak")}
           />
         </div>
       </div>

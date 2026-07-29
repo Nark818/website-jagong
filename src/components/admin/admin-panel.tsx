@@ -3,7 +3,16 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Landmark, ExternalLink, LogOut, CheckCircle2, XCircle } from "lucide-react";
+import { AnimatePresence, motion, type TargetAndTransition } from "motion/react";
+import {
+  Landmark,
+  ExternalLink,
+  LogOut,
+  CheckCircle2,
+  PlusCircle,
+  Trash2,
+  XCircle,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/browser";
 import { SECTIONS, SECTION_NOTES, type SectionKey } from "./section-keys";
@@ -18,6 +27,59 @@ import { LayananSection } from "./sections/layanan-section";
 import { PetaSection } from "./sections/peta-section";
 import { KontakSection } from "./sections/kontak-section";
 
+type ToastKind = "success" | "add" | "delete" | "error";
+
+/** Entrance/exit motion per toast kind — each reads like its meaning: a
+ * spring "pop" for adding, a settle for saving, a shake for errors, and a
+ * paper-crumple fling for deleting. */
+const TOAST_MOTION: Record<
+  ToastKind,
+  { initial: TargetAndTransition; animate: TargetAndTransition; exit: TargetAndTransition }
+> = {
+  success: {
+    initial: { opacity: 0, y: 24, scale: 0.96 },
+    animate: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { type: "spring", stiffness: 320, damping: 26 },
+    },
+    exit: { opacity: 0, y: 12, scale: 0.97, transition: { duration: 0.2 } },
+  },
+  add: {
+    initial: { opacity: 0, y: 16, scale: 0.4 },
+    animate: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { type: "spring", stiffness: 430, damping: 14 },
+    },
+    exit: { opacity: 0, scale: 0.6, y: -8, transition: { duration: 0.2 } },
+  },
+  delete: {
+    initial: { opacity: 0, y: 16, scale: 0.97 },
+    animate: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.25, ease: "easeOut" } },
+    // Paper-crush: squash, twist, and fling away like it's tossed in a bin.
+    exit: {
+      opacity: [1, 1, 0],
+      scale: [1, 0.82, 0.3],
+      rotate: [0, -10, 18],
+      x: [0, 6, 44],
+      y: [0, 4, 56],
+      transition: { duration: 0.45, ease: "easeIn" },
+    },
+  },
+  error: {
+    initial: { opacity: 0, x: 0 },
+    animate: {
+      opacity: 1,
+      x: [0, -10, 10, -8, 8, -4, 4, 0],
+      transition: { duration: 0.5, ease: "easeInOut" },
+    },
+    exit: { opacity: 0, scale: 0.95, transition: { duration: 0.2 } },
+  },
+};
+
 export default function AdminPanel({
   userEmail,
   initialData,
@@ -27,14 +89,37 @@ export default function AdminPanel({
 }) {
   const router = useRouter();
   const [activeSection, setActiveSection] = useState<SectionKey>("dashboard");
-  const [toast, setToast] = useState<{ ok: boolean; message: string } | null>(null);
+  const [toast, setToast] = useState<{
+    id: number;
+    ok: boolean;
+    message: string;
+    variant?: "add" | "delete";
+  } | null>(null);
   const toastTimer = useRef<number | undefined>(undefined);
+  const toastIdRef = useRef(0);
 
-  const notify: Notify = (ok, message) => {
-    setToast({ ok, message: message ?? (ok ? "Tersimpan." : "Terjadi kesalahan.") });
+  const notify: Notify = (ok, message, variant) => {
+    const fallback = variant === "add" ? "Ditambahkan." : variant === "delete" ? "Dihapus." : "Tersimpan.";
+    toastIdRef.current += 1;
+    setToast({
+      id: toastIdRef.current,
+      ok,
+      message: message ?? (ok ? fallback : "Terjadi kesalahan."),
+      variant,
+    });
     window.clearTimeout(toastTimer.current);
     toastTimer.current = window.setTimeout(() => setToast(null), 2500);
   };
+
+  const toastKind: ToastKind | null = !toast
+    ? null
+    : !toast.ok
+      ? "error"
+      : toast.variant === "add"
+        ? "add"
+        : toast.variant === "delete"
+          ? "delete"
+          : "success";
 
   const goTo = (key: SectionKey) => setActiveSection(key);
 
@@ -90,7 +175,7 @@ export default function AdminPanel({
       </div>
 
       {/* Desktop sidebar */}
-      <aside className="hidden w-60 shrink-0 flex-col bg-ocean-900 px-4 py-6 md:flex">
+      <aside className="hidden w-60 shrink-0 flex-col bg-ocean-900 px-4 py-6 md:sticky md:top-0 md:flex md:h-screen md:self-start md:overflow-y-auto">
         <div className="flex items-center gap-2.5 px-2 pb-6">
           <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-ocean-600 text-white">
             <Landmark className="size-[18px]" />
@@ -148,28 +233,46 @@ export default function AdminPanel({
           <p className="mt-1 mb-0 text-[13px] text-text-muted">{SECTION_NOTES[activeSection]}</p>
         </header>
 
-        {toast && (
-          <div
-            className={cn(
-              "mx-4 mt-4 flex items-center gap-2.5 rounded-md border px-4 py-3 sm:mx-8",
-              toast.ok
-                ? "border-forest-200 bg-forest-50 text-forest-800"
-                : "border-[#FCA5A5] bg-[#FEF2F2] text-[#B91C1C]",
-            )}
-          >
-            {toast.ok ? (
-              <CheckCircle2 className="size-4 shrink-0" />
-            ) : (
-              <XCircle className="size-4 shrink-0" />
-            )}
-            <span className="text-[13px]">{toast.message}</span>
-          </div>
-        )}
+        <AnimatePresence>
+          {toast && toastKind && (
+            <motion.div
+              key={toast.id}
+              initial={TOAST_MOTION[toastKind].initial}
+              animate={TOAST_MOTION[toastKind].animate}
+              exit={TOAST_MOTION[toastKind].exit}
+              className={cn(
+                "fixed right-4 bottom-4 z-50 flex max-w-[calc(100vw-2rem)] items-center gap-3 rounded-lg border px-5 py-4 shadow-lg sm:right-8 sm:bottom-8 sm:max-w-md",
+                !toast.ok
+                  ? "border-[#FCA5A5] bg-[#FEF2F2] text-[#B91C1C]"
+                  : toast.variant === "add"
+                    ? "border-ocean-200 bg-ocean-50 text-ocean-800"
+                    : toast.variant === "delete"
+                      ? "border-[#FDE0A8] bg-[#FFF7E8] text-[#92661A]"
+                      : "border-forest-200 bg-forest-50 text-forest-800",
+              )}
+            >
+              {!toast.ok ? (
+                <XCircle className="size-5 shrink-0" />
+              ) : toast.variant === "add" ? (
+                <PlusCircle className="size-5 shrink-0" />
+              ) : toast.variant === "delete" ? (
+                <Trash2 className="size-5 shrink-0" />
+              ) : (
+                <CheckCircle2 className="size-5 shrink-0" />
+              )}
+              <span className="text-sm">{toast.message}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="w-full max-w-[1000px] flex-1 box-border p-4 sm:p-8">
           {activeSection === "dashboard" && <DashboardSection data={initialData} goTo={goTo} />}
           {activeSection === "beranda" && (
-            <BerandaSection content={initialData.content} notify={notify} />
+            <BerandaSection
+              content={initialData.content}
+              heroSlides={initialData.heroSlides}
+              notify={notify}
+            />
           )}
           {activeSection === "profil" && (
             <ProfilSection content={initialData.content} staff={initialData.staff} notify={notify} />

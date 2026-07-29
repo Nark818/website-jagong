@@ -38,7 +38,7 @@ export function ProfilSection({
         sort_order: staff.length,
       });
       setStaff((s) => [...s, row]);
-      notify(true);
+      notify(true, "Staf baru ditambahkan.", "add");
     } catch {
       notify(false, "Gagal menambah staf.");
     }
@@ -48,7 +48,7 @@ export function ProfilSection({
     setStaff((s) => s.filter((p) => p.id !== id));
     try {
       await deleteStaff(id);
-      notify(true);
+      notify(true, "Staf dihapus.", "delete");
     } catch {
       notify(false, "Gagal menghapus staf.");
     }

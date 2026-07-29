@@ -13,12 +13,36 @@ export async function updateContentBlock(key: string, value: string) {
 // ---- media storage ----------------------------------------------------------
 
 export async function uploadMedia(file: File, folder: string) {
+  if (!file.type.startsWith("image/")) {
+    throw new Error("File harus berupa gambar.");
+  }
   const supabase = createClient();
   const ext = file.name.split(".").pop() ?? "bin";
   const path = `${folder}/${crypto.randomUUID()}.${ext}`;
   const { error } = await supabase.storage.from("media").upload(path, file);
   if (error) throw error;
   return supabase.storage.from("media").getPublicUrl(path).data.publicUrl;
+}
+
+// ---- hero_slides --------------------------------------------------------------
+
+export async function createHeroSlide(input: TablesInsert<"hero_slides">) {
+  const supabase = createClient();
+  const { data, error } = await supabase.from("hero_slides").insert(input).select().single();
+  if (error) throw error;
+  return data;
+}
+
+export async function updateHeroSlide(id: string, patch: TablesUpdate<"hero_slides">) {
+  const supabase = createClient();
+  const { error } = await supabase.from("hero_slides").update(patch).eq("id", id);
+  if (error) throw error;
+}
+
+export async function deleteHeroSlide(id: string) {
+  const supabase = createClient();
+  const { error } = await supabase.from("hero_slides").delete().eq("id", id);
+  if (error) throw error;
 }
 
 // ---- staff ------------------------------------------------------------------

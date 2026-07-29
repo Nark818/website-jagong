@@ -32,7 +32,7 @@ export function GaleriSection({
     try {
       const row = await createGalleryItem({ label: "Foto baru", sort_order: gallery.length });
       setGallery((g) => [...g, row]);
-      notify(true);
+      notify(true, "Foto baru ditambahkan.", "add");
     } catch {
       notify(false, "Gagal menambah foto.");
     }
@@ -42,7 +42,7 @@ export function GaleriSection({
     setGallery((g) => g.filter((it) => it.id !== id));
     try {
       await deleteGalleryItem(id);
-      notify(true);
+      notify(true, "Foto dihapus.", "delete");
     } catch {
       notify(false, "Gagal menghapus foto.");
     }
