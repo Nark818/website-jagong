@@ -26,7 +26,7 @@ const NAV_ITEMS: NavEntry[] = [
   { href: "/peta-desa", label: "Peta Kelurahan" },
 ];
 
-export function Nav() {
+export function Nav({ isAdmin }: { isAdmin: boolean }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -120,14 +120,16 @@ export function Nav() {
           </nav>
 
           <div className="flex shrink-0 items-center gap-2.5">
-            <Link
-              href="/admin"
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-sm border border-dashed border-border-strong px-3 py-2 text-xs font-medium text-text-secondary no-underline hover:text-ocean-700"
-              title="Sementara — tautan cepat ke admin panel"
-            >
-              <LayoutDashboard className="size-3.5" />
-              <span className="hidden sm:inline">Admin</span>
-            </Link>
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-sm border border-dashed border-border-strong px-3 py-2 text-xs font-medium text-text-secondary no-underline hover:text-ocean-700"
+                title="Kembali ke admin panel"
+              >
+                <LayoutDashboard className="size-3.5" />
+                <span className="hidden sm:inline">Admin</span>
+              </Link>
+            )}
             <button
               type="button"
               onClick={() => setMobileOpen((open) => !open)}
