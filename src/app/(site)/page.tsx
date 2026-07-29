@@ -168,7 +168,7 @@ export default async function Home() {
                 <DbImage
                   src={lurah.photo_url}
                   alt="Foto"
-                  className="size-14 shrink-0 rounded-full"
+                  className="size-14 shrink-0 rounded-full object-[center_25%]"
                 />
                 <div>
                   <div className="text-[15px] font-semibold text-text-primary">
@@ -258,7 +258,7 @@ export default async function Home() {
                 <DbImage
                   src={person.photo_url}
                   alt="Foto staf"
-                  className="h-[180px] w-full"
+                  className="h-[180px] w-full object-[center_25%]"
                 />
                 <div className="p-4 text-center">
                   <div className="text-sm font-semibold text-text-primary">

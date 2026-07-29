@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Image as ImageIcon, Pencil, Upload } from "lucide-react";
+import { Image as ImageIcon, Loader2, Pencil, Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type Tag = "span" | "div" | "h2" | "h3" | "p";
@@ -98,20 +98,27 @@ export function EditableText({
 export function EditableImage({
   photo,
   label,
-  onPhotoChange,
+  onUpload,
   className,
+  imgClassName,
 }: {
   photo: string | null;
   label: string;
-  onPhotoChange: (url: string | null) => void;
+  onUpload: (file: File) => Promise<void>;
   className?: string;
+  imgClassName?: string;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
 
-  const handleFile = (file: File | undefined) => {
+  const handleFile = async (file: File | undefined) => {
     if (!file) return;
-    if (photo) URL.revokeObjectURL(photo);
-    onPhotoChange(URL.createObjectURL(file));
+    setUploading(true);
+    try {
+      await onUpload(file);
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -123,7 +130,7 @@ export function EditableImage({
     >
       {photo ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={photo} alt={label} className="size-full object-cover" />
+        <img src={photo} alt={label} className={cn("size-full object-cover", imgClassName)} />
       ) : (
         <div className="flex size-full flex-col items-center justify-center gap-1.5 p-2 text-text-muted">
           <ImageIcon className="size-6" />
@@ -133,10 +140,22 @@ export function EditableImage({
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
-        className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-ocean-900/0 text-white opacity-0 transition-all duration-150 group-hover/img:bg-ocean-900/55 group-hover/img:opacity-100"
+        disabled={uploading}
+        className={cn(
+          "absolute inset-0 flex flex-col items-center justify-center gap-1.5 text-white transition-all duration-150",
+          uploading
+            ? "bg-ocean-900/55 opacity-100"
+            : "bg-ocean-900/0 opacity-0 group-hover/img:bg-ocean-900/55 group-hover/img:opacity-100",
+        )}
       >
-        <Upload className="size-5" />
-        <span className="text-xs font-medium">Ganti foto</span>
+        {uploading ? (
+          <Loader2 className="size-5 animate-spin" />
+        ) : (
+          <Upload className="size-5" />
+        )}
+        <span className="text-xs font-medium">
+          {uploading ? "Mengunggah…" : "Ganti foto"}
+        </span>
       </button>
       <input
         ref={inputRef}

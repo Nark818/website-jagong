@@ -76,7 +76,7 @@ export default async function ProfilPage() {
               <DbImage
                 src={person.photo_url}
                 alt="Foto staf"
-                className="h-[180px] w-full"
+                className="h-[180px] w-full object-[center_25%]"
               />
               <div className="p-4 text-center">
                 <div className="text-sm font-semibold text-text-primary">

@@ -85,6 +85,28 @@ export async function getServiceTypes() {
   return data ?? [];
 }
 
+/** Raw target row for a year (unlike getTaxSummary, not aggregated — for admin editing). */
+export async function getTaxYearTarget(year: number) {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("tax_year_targets")
+    .select("year, pokok_stts, pokok_rp, tunggakan_awal_stts, tunggakan_awal_rp")
+    .eq("year", year)
+    .maybeSingle();
+  return data;
+}
+
+/** Raw monthly rows for a year (unlike getTaxSummary, not summed — for admin editing). */
+export async function getTaxMonthlyRealizations(year: number) {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("tax_monthly_realizations")
+    .select("id, year, month, pbb_stts, pbb_rp, tunggakan_stts, tunggakan_rp")
+    .eq("year", year)
+    .order("month", { ascending: true });
+  return data ?? [];
+}
+
 /**
  * PBB realization for a year, derived from the monthly rows rather than
  * hand-tracked "lalu"/"ini" fields — S/D Bulan Lalu is every month before the
