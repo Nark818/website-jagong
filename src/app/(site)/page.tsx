@@ -6,21 +6,19 @@ import {
   FileText,
   MapPin,
 } from "lucide-react";
-import { ImagePlaceholder } from "@/components/site/image-placeholder";
+import { DbImage } from "@/components/site/db-image";
 import { HeroCarousel } from "@/components/site/hero-carousel";
 import { CountUp } from "@/components/site/count-up";
-
-const STATS: {
-  value: number;
-  label: string;
-  decimals?: number;
-  suffix?: string;
-}[] = [
-  { value: 4244, label: "Jiwa" },
-  { value: 1280, label: "Kepala Keluarga" },
-  { value: 3, label: "Dusun" },
-  { value: 1.32, label: "Luas Wilayah", decimals: 2, suffix: " km²" },
-];
+import { CAT_LABEL, TAG_CLASSES } from "@/lib/news";
+import { formatIndonesianDate } from "@/lib/format";
+import {
+  getContentBlocks,
+  getStaff,
+  getGalleryItems,
+  getNewsPosts,
+  getPopulationSnapshot,
+  getRwAreas,
+} from "@/lib/supabase/queries";
 
 const QUICK_LINKS = [
   {
@@ -53,74 +51,42 @@ const QUICK_LINKS = [
   },
 ];
 
-const STAFF = [
-  {
-    name: "Elvira Septia Ansar, S.STP",
-    role: "Lurah",
-    nip: "NIP. 19920923 201609 2 001",
-  },
-  {
-    name: "Sultan, S.IP",
-    role: "Sekretaris",
-    nip: "NIP. 19740325 200903 1 004",
-  },
-  {
-    name: "Aisyah Intang, S.Sos",
-    role: "Kasi Pemerintahan",
-    nip: "NIP. 19710725 200701 2 016",
-  },
-  {
-    name: "Patmawati, S.Sos",
-    role: "Kasi Kesos",
-    nip: "NIP. 1976065 200701 2 029",
-  },
-  {
-    name: "Nurmi, SM",
-    role: "Kasi Pembangunan",
-    nip: "NIP. 19721225 200801 2 012",
-  },
-];
-
-const GALLERY = [
-  "Balai Kelurahan",
-  "Kegiatan gotong royong",
-  "Lahan pertanian warga",
-  "Tambak ikan bandeng",
-  "Posyandu kelurahan",
-  "Panen raya jagung",
-  "Kantor kelurahan",
-  "Pasar kelurahan",
-];
-
-const NEWS_ITEMS = [
-  {
-    tag: "Pengumuman",
-    title: "Jadwal Musyawarah Kelurahan Tahun 2026",
-    date: "18 Juli 2026",
-  },
-  {
-    tag: "Berita",
-    title: "Panen Raya Jagung di Dusun Bontoa Berjalan Lancar",
-    date: "12 Juli 2026",
-  },
-  {
-    tag: "Pengumuman",
-    title: "Pembukaan Pendaftaran Bantuan Sosial Tahap II",
-    date: "5 Juli 2026",
-  },
-];
-
 const TONE_CLASSES = {
   ocean: { badge: "bg-ocean-50", icon: "text-ocean-700" },
   forest: { badge: "bg-forest-50", icon: "text-forest-700" },
 };
 
-const TAG_CLASSES: Record<string, string> = {
-  Pengumuman: "bg-forest-50 text-forest-700",
-  Berita: "bg-ocean-50 text-ocean-700",
-};
+export default async function Home() {
+  const [content, staff, gallery, news, population, rwAreas] =
+    await Promise.all([
+      getContentBlocks(),
+      getStaff(),
+      getGalleryItems(),
+      getNewsPosts(),
+      getPopulationSnapshot(),
+      getRwAreas(),
+    ]);
 
-export default function Home() {
+  const latestNews = news.slice(0, 3);
+  const lurah = staff[0];
+
+  const STATS: {
+    value: number;
+    label: string;
+    decimals?: number;
+    suffix?: string;
+  }[] = [
+    { value: population?.total_penduduk ?? 0, label: "Jiwa" },
+    { value: population?.kepala_keluarga ?? 0, label: "Kepala Keluarga" },
+    { value: rwAreas.length, label: "Dusun" },
+    {
+      value: population?.luas_wilayah_km2 ?? 0,
+      label: "Luas Wilayah",
+      decimals: 2,
+      suffix: " km²",
+    },
+  ];
+
   return (
     <main className="flex-1">
       {/* Hero */}
@@ -132,12 +98,11 @@ export default function Home() {
             Situs Resmi Pemerintah Kelurahan
           </span>
           <h1 className="m-0 max-w-[18ch] text-[clamp(34px,5.5vw,56px)] leading-[1.1] font-semibold text-white">
-            Kelurahan Jagong, Kecamatan Pangkajene
+            {content["hero.title"] ?? "Kelurahan Jagong, Kecamatan Pangkajene"}
           </h1>
           <p className="m-0 max-w-[56ch] text-[clamp(16px,2vw,19px)] leading-relaxed text-white/90">
-            Melayani warga dengan transparan, cepat, dan terpercaya. Informasi
-            kelurahan, data kependudukan, dan layanan publik dalam satu
-            tempat.
+            {content["hero.subtitle"] ??
+              "Melayani warga dengan transparan, cepat, dan terpercaya. Informasi kelurahan, data kependudukan, dan layanan publik dalam satu tempat."}
           </p>
           <div className="mt-2 flex flex-wrap gap-3 pointer-events-auto">
             <Link
@@ -188,35 +153,37 @@ export default function Home() {
               Sambutan
             </span>
             <h2 className="mt-3 mb-4 text-[clamp(26px,3.5vw,34px)] text-text-primary">
-              Selamat datang di Kelurahan Jagong
+              {content["sambutan.title"] ?? "Selamat datang di Kelurahan Jagong"}
             </h2>
             <p className="mb-3 text-justify text-[18px] leading-[1.7] text-text-secondary">
-              Kami berkomitmen menghadirkan pemerintahan kelurahan yang
-              terbuka dan mudah diakses oleh seluruh warga, kapan pun
-              dibutuhkan.
+              {content["sambutan.body_1"] ??
+                "Kami berkomitmen menghadirkan pemerintahan kelurahan yang terbuka dan mudah diakses oleh seluruh warga, kapan pun dibutuhkan."}
             </p>
             <p className="text-justify text-[18px] leading-[1.7] text-text-secondary">
-              Melalui situs ini, warga dapat mengakses informasi kelurahan,
-              data kependudukan, dan mengajukan surat layanan tanpa harus
-              menunggu lama di kantor kelurahan.
+              {content["sambutan.body_2"] ??
+                "Melalui situs ini, warga dapat mengakses informasi kelurahan, data kependudukan, dan mengajukan surat layanan tanpa harus menunggu lama di kantor kelurahan."}
             </p>
-            <div className="mt-6 flex items-center gap-3.5">
-              <ImagePlaceholder
-                label="Foto"
-                className="size-14 shrink-0 rounded-full"
-              />
-              <div>
-                <div className="text-[15px] font-semibold text-text-primary">
-                  Elvira Septia Ansar, S.STP
-                </div>
-                <div className="text-[13px] text-text-muted">
-                  Lurah Jagong
+            {lurah && (
+              <div className="mt-6 flex items-center gap-3.5">
+                <DbImage
+                  src={lurah.photo_url}
+                  alt="Foto"
+                  className="size-14 shrink-0 rounded-full"
+                />
+                <div>
+                  <div className="text-[15px] font-semibold text-text-primary">
+                    {lurah.name}
+                  </div>
+                  <div className="text-[13px] text-text-muted">
+                    {lurah.role} Jagong
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
-          <ImagePlaceholder
-            label="Foto Kantor Kelurahan Jagong"
+          <DbImage
+            src={content["sambutan.photo_url"] ?? null}
+            alt="Foto Kantor Kelurahan Jagong"
             className="h-[340px] w-full rounded-lg"
           />
         </div>
@@ -280,16 +247,17 @@ export default function Home() {
         <div className="staff-fade overflow-hidden py-4">
           <div
             className="staff-track animate-marquee-left flex w-max gap-6 px-6"
-            style={{ animationDuration: `${STAFF.length * 4}s` }}
+            style={{ animationDuration: `${staff.length * 4}s` }}
           >
-            {[...STAFF, ...STAFF].map((person, i) => (
+            {[...staff, ...staff].map((person, i) => (
               <div
                 key={i}
-                aria-hidden={i >= STAFF.length}
+                aria-hidden={i >= staff.length}
                 className="staff-card flex w-[220px] shrink-0 flex-col overflow-hidden rounded-lg border border-border-default bg-surface-card sm:w-[250px]"
               >
-                <ImagePlaceholder
-                  label="Foto staf"
+                <DbImage
+                  src={person.photo_url}
+                  alt="Foto staf"
                   className="h-[180px] w-full"
                 />
                 <div className="p-4 text-center">
@@ -328,10 +296,11 @@ export default function Home() {
           </Link>
         </div>
         <div className="grid grid-cols-2 grid-rows-4 gap-4 sm:grid-cols-4 sm:grid-rows-2">
-          {GALLERY.map((label) => (
-            <ImagePlaceholder
-              key={label}
-              label={label}
+          {gallery.map((item) => (
+            <DbImage
+              key={item.id}
+              src={item.photo_url}
+              alt={item.label}
               className="h-[180px] w-full rounded-[14px]"
             />
           ))}
@@ -352,24 +321,31 @@ export default function Home() {
           </Link>
         </div>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
-          {NEWS_ITEMS.map((item, i) => (
-            <div
-              key={i}
-              className="overflow-hidden rounded-lg border border-border-default bg-surface-card"
+          {latestNews.map((item) => (
+            <Link
+              key={item.id}
+              href={`/berita/${item.slug}`}
+              className="overflow-hidden rounded-lg border border-border-default bg-surface-card no-underline"
             >
-              <ImagePlaceholder label="Foto berita" className="h-[160px] w-full" />
+              <DbImage
+                src={item.photo_url}
+                alt="Foto berita"
+                className="h-[160px] w-full"
+              />
               <div className="p-5">
                 <span
-                  className={`mb-3 inline-flex rounded-full px-2.5 py-[3px] text-[11px] font-semibold tracking-wide uppercase ${TAG_CLASSES[item.tag]}`}
+                  className={`mb-3 inline-flex rounded-full px-2.5 py-[3px] text-[11px] font-semibold tracking-wide uppercase ${TAG_CLASSES[item.category]}`}
                 >
-                  {item.tag}
+                  {CAT_LABEL[item.category]}
                 </span>
                 <h3 className="mb-2 text-[18px] leading-snug text-text-primary">
                   {item.title}
                 </h3>
-                <p className="m-0 text-[13px] text-text-muted">{item.date}</p>
+                <p className="m-0 text-[13px] text-text-muted">
+                  {formatIndonesianDate(item.published_at)}
+                </p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>

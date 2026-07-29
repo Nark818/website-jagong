@@ -1,15 +1,22 @@
 import { Info, Compass } from "lucide-react";
 import { PageHeader } from "@/components/site/page-header";
 import { ImagePlaceholder } from "@/components/site/image-placeholder";
+import { getMapBoundaries } from "@/lib/supabase/queries";
 
-const BOUNDARIES = [
-  { dir: "Utara", value: "Kelurahan Mappasaile" },
-  { dir: "Selatan", value: "Kelurahan Anrong Appaka" },
-  { dir: "Timur", value: "Kelurahan Tumampua" },
-  { dir: "Barat", value: "Kelurahan Tekolabbua" },
-];
+const DIRECTION_ORDER = ["utara", "selatan", "timur", "barat"];
+const DIRECTION_LABEL: Record<string, string> = {
+  utara: "Utara",
+  selatan: "Selatan",
+  timur: "Timur",
+  barat: "Barat",
+};
 
-export default function PetaKelurahanPage() {
+export default async function PetaKelurahanPage() {
+  const boundaries = await getMapBoundaries();
+  const sorted = [...boundaries].sort(
+    (a, b) => DIRECTION_ORDER.indexOf(a.direction) - DIRECTION_ORDER.indexOf(b.direction),
+  );
+
   return (
     <main className="flex-1">
       <PageHeader
@@ -43,19 +50,19 @@ export default function PetaKelurahanPage() {
       <section className="mx-auto max-w-[1120px] px-6 pt-16 pb-20">
         <h2 className="mb-5 text-[22px] text-text-primary">Batas Wilayah</h2>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
-          {BOUNDARIES.map((b) => (
+          {sorted.map((b) => (
             <div
-              key={b.dir}
+              key={b.id}
               className="rounded-md border border-border-default bg-surface-card p-5"
             >
               <div className="mb-2 flex items-center gap-2">
                 <Compass className="size-[15px] text-ocean-600" />
                 <span className="text-xs font-semibold tracking-wide text-text-muted uppercase">
-                  {b.dir}
+                  {DIRECTION_LABEL[b.direction]}
                 </span>
               </div>
               <div className="text-sm font-medium text-text-primary">
-                {b.value}
+                {b.neighbor_name}
               </div>
             </div>
           ))}

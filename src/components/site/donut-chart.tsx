@@ -12,7 +12,13 @@ export function DonutChart({
   const total = data.reduce((sum, d) => sum + d.value, 0);
   const radius = (size - thickness) / 2;
   const circumference = 2 * Math.PI * radius;
-  let acc = 0;
+  const segments = data.map((d, i) => {
+    const priorTotal = data.slice(0, i).reduce((sum, p) => sum + p.value, 0);
+    const frac = total > 0 ? d.value / total : 0;
+    const dash = frac * circumference;
+    const strokeDashoffset = total > 0 ? -(priorTotal / total) * circumference : 0;
+    return { ...d, dash, strokeDashoffset };
+  });
 
   return (
     <div className="flex flex-wrap items-center gap-8">
@@ -30,25 +36,19 @@ export function DonutChart({
           stroke="var(--color-border-default)"
           strokeWidth={thickness}
         />
-        {data.map((d) => {
-          const frac = total > 0 ? d.value / total : 0;
-          const dash = frac * circumference;
-          const strokeDashoffset = -acc;
-          acc += dash;
-          return (
-            <circle
-              key={d.label}
-              cx={size / 2}
-              cy={size / 2}
-              r={radius}
-              fill="none"
-              stroke={d.color}
-              strokeWidth={thickness}
-              strokeDasharray={`${dash} ${circumference - dash}`}
-              strokeDashoffset={strokeDashoffset}
-            />
-          );
-        })}
+        {segments.map((d) => (
+          <circle
+            key={d.label}
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            fill="none"
+            stroke={d.color}
+            strokeWidth={thickness}
+            strokeDasharray={`${d.dash} ${circumference - d.dash}`}
+            strokeDashoffset={d.strokeDashoffset}
+          />
+        ))}
       </svg>
       <ul className="m-0 flex list-none flex-col gap-3 p-0">
         {data.map((d) => (

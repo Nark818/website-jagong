@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Mail, Clock } from "lucide-react";
+import { getContentBlocks } from "@/lib/supabase/queries";
 
 const LINKS = [
   { href: "/", label: "Beranda" },
@@ -10,7 +11,9 @@ const LINKS = [
   { href: "/peta-desa", label: "Peta Kelurahan" },
 ];
 
-export function Footer() {
+export async function Footer() {
+  const content = await getContentBlocks();
+
   return (
     <footer className="bg-ocean-900 text-neutral-100">
       <div className="mx-auto grid max-w-[1120px] grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-10 px-6 py-16 pb-8">
@@ -58,19 +61,22 @@ export function Footer() {
             <div className="flex items-start gap-2.5">
               <MapPin className="mt-0.5 size-4 shrink-0 text-ocean-300" />
               <span className="text-sm leading-relaxed text-ocean-100">
-                Jl. Pelelangan, Kel. Jagong, Kec. Pangkep, Sulawesi Selatan
+                {content["contact.address"] ??
+                  "Jl. Pelelangan, Kel. Jagong, Kec. Pangkep, Sulawesi Selatan"}
               </span>
             </div>
             <div className="flex items-center gap-2.5">
               <Mail className="size-4 shrink-0 text-ocean-300" />
-              <span className="text-sm text-ocean-100">jagong2025@g.mail</span>
+              <span className="text-sm text-ocean-100">
+                {content["contact.email"] ?? "jagong2025@g.mail"}
+              </span>
             </div>
             <div className="flex items-start gap-2.5">
               <Clock className="mt-0.5 size-4 shrink-0 text-ocean-300" />
               <span className="text-sm leading-relaxed text-ocean-100">
-                Senin–Kamis, 08.00–16.00 WITA
+                {content["contact.hours_weekday"] ?? "Senin–Kamis, 08.00–16.00 WITA"}
                 <br />
-                Jumat, 08.00–16.30 WITA
+                {content["contact.hours_friday"] ?? "Jumat, 08.00–16.30 WITA"}
               </span>
             </div>
           </div>

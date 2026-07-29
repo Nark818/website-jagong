@@ -1,36 +1,11 @@
 import Image from "next/image";
 import { PageHeader } from "@/components/site/page-header";
-import { ImagePlaceholder } from "@/components/site/image-placeholder";
+import { DbImage } from "@/components/site/db-image";
+import { getContentBlocks, getStaff } from "@/lib/supabase/queries";
 
-const STAFF_DETAIL = [
-  {
-    name: "Elvira Septia Ansar, S.STP",
-    role: "Lurah",
-    nip: "NIP. 19920923 201609 2 001",
-  },
-  {
-    name: "Sultan, S.IP",
-    role: "Sekretaris",
-    nip: "NIP. 19740325 200903 1 004",
-  },
-  {
-    name: "Aisyah Intang, S.Sos",
-    role: "Kasi Pemerintahan",
-    nip: "NIP. 19710725 200701 2 016",
-  },
-  {
-    name: "Patmawati, S.Sos",
-    role: "Kasi Kesos",
-    nip: "NIP. 1976065 200701 2 029",
-  },
-  {
-    name: "Nurmi, SM",
-    role: "Kasi Pembangunan",
-    nip: "NIP. 19721225 200801 2 012",
-  },
-];
+export default async function ProfilPage() {
+  const [content, staff] = await Promise.all([getContentBlocks(), getStaff()]);
 
-export default function ProfilPage() {
   return (
     <main className="flex-1">
       <PageHeader
@@ -49,20 +24,13 @@ export default function ProfilPage() {
               Sejarah Kelurahan
             </h2>
             <p className="text-justify text-[18px] leading-[1.75] text-text-secondary">
-              Kelurahan Jagong merupakan salah satu kelurahan yang berada di
-              Kecamatan Pangkajene, Kabupaten Pangkajene dan Kepulauan,
-              Provinsi Sulawesi Selatan. Berlokasi strategis di dekat pusat
-              pemerintahan kecamatan dan kabupaten, Kelurahan Jagong
-              berkembang sebagai kawasan perkotaan dengan potensi di bidang
-              pertanian, perdagangan, serta pelayanan masyarakat. Didukung
-              oleh masyarakat yang menjunjung tinggi nilai budaya Bugis dan
-              Makassar, Kelurahan Jagong terus berkembang melalui peningkatan
-              kualitas pendidikan, kesehatan, dan infrastruktur demi
-              mewujudkan kesejahteraan masyarakat.
+              {content["sejarah.body_1"] ??
+                "Kelurahan Jagong merupakan salah satu kelurahan yang berada di Kecamatan Pangkajene, Kabupaten Pangkajene dan Kepulauan, Provinsi Sulawesi Selatan."}
             </p>
           </div>
-          <ImagePlaceholder
-            label="Foto arsip kelurahan (contoh)"
+          <DbImage
+            src={content["sejarah.photo_url"] ?? null}
+            alt="Foto arsip kelurahan"
             className="h-[300px] w-full rounded-lg"
           />
         </div>
@@ -77,11 +45,12 @@ export default function ProfilPage() {
           Struktur Organisasi Kelurahan Jagong.
         </p>
 
-        {/* Diagram sebagai gambar — jika struktur berubah, cukup ganti file
-            public/images/Struktur/Struktur_Organisasi_Kelurahan.jpg */}
         <div className="overflow-x-auto rounded-lg border border-border-default bg-surface-card p-4 sm:p-8">
           <Image
-            src="/images/Struktur/Struktur_Organisasi_Kelurahan.jpg"
+            src={
+              content["profil.struktur_image_url"] ??
+              "/images/Struktur/Struktur_Organisasi_Kelurahan.jpg"
+            }
             alt="Bagan Struktur Organisasi Kelurahan Jagong"
             width={1348}
             height={531}
@@ -99,12 +68,16 @@ export default function ProfilPage() {
           Detail pejabat Kelurahan Jagong.
         </p>
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
-          {STAFF_DETAIL.map((person) => (
+          {staff.map((person) => (
             <div
-              key={person.name}
+              key={person.id}
               className="flex flex-col overflow-hidden rounded-lg border border-border-default bg-surface-card"
             >
-              <ImagePlaceholder label="Foto staf" className="h-[180px] w-full" />
+              <DbImage
+                src={person.photo_url}
+                alt="Foto staf"
+                className="h-[180px] w-full"
+              />
               <div className="p-4 text-center">
                 <div className="text-sm font-semibold text-text-primary">
                   {person.name}
