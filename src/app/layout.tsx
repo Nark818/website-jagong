@@ -20,10 +20,43 @@ const plexMono = IBM_Plex_Mono({
   weight: ["400", "500", "600"],
 });
 
+const siteUrl = "https://kelurahanjagong.vercel.app";
+const siteName = "Website Kelurahan Jagong";
+const siteDescription =
+  "Situs resmi Pemerintah Kelurahan Jagong, Kecamatan Pangkajene, Kabupaten Pangkep, Sulawesi Selatan. Profil, berita, layanan publik, data penduduk, dan peta kelurahan.";
+
 export const metadata: Metadata = {
-  title: "Desa Jagong - Situs Resmi Pemerintah Desa",
-  description:
-    "Situs resmi Pemerintah Desa Jagong, Kecamatan Pangkep, Kabupaten Pangkep, Sulawesi Selatan.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: `${siteName} - Situs Resmi Pemerintah Kelurahan Jagong`,
+    template: `%s | ${siteName}`,
+  },
+  description: siteDescription,
+  keywords: [
+    "Website Kelurahan Jagong",
+    "Kelurahan Jagong",
+    "Pemerintah Kelurahan Jagong",
+    "Kecamatan Pangkajene",
+    "Kabupaten Pangkep",
+  ],
+  alternates: {
+    canonical: siteUrl,
+  },
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    url: siteUrl,
+    siteName,
+    title: siteName,
+    description: siteDescription,
+    images: [{ url: "/images/Logo/Logo_Kelurahan_Jagong.png" }],
+  },
+  twitter: {
+    card: "summary",
+    title: siteName,
+    description: siteDescription,
+    images: ["/images/Logo/Logo_Kelurahan_Jagong.png"],
+  },
 };
 
 export default function RootLayout({

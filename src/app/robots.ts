@@ -7,5 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin", "/admin/*"],
     },
+    sitemap: "https://kelurahanjagong.vercel.app/sitemap.xml",
   };
 }
