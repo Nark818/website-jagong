@@ -1,8 +1,17 @@
 import { useState } from "react";
 import { EditableText, EditableImage } from "../editable";
-import { DeleteIconButton, PreviewCard, useContentMap } from "../ui";
+import { AddRowButton, DeleteIconButton, Pagination, PreviewCard, useContentMap } from "../ui";
 import { createStaff, deleteStaff, updateStaff, uploadMedia } from "@/lib/supabase/mutations";
 import type { ContentMap, Notify, StaffRow } from "../types";
+
+/** 4 columns x 4 rows per page. */
+const PAGE_SIZE = 16;
+
+/** The "NIP." label is a fixed prefix baked into the stored string — strip it
+ * for display/editing so only the number itself is ever editable. */
+function stripNipPrefix(nip: string) {
+  return nip.replace(/^NIP\.?\s*/i, "");
+}
 
 export function ProfilSection({
   content: initialContent,
@@ -15,6 +24,11 @@ export function ProfilSection({
 }) {
   const { content, saveField } = useContentMap(initialContent, notify);
   const [staff, setStaff] = useState(initialStaff);
+  const [page, setPage] = useState(0);
+
+  const pageCount = Math.max(1, Math.ceil(staff.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount - 1);
+  const pagedStaff = staff.slice(currentPage * PAGE_SIZE, currentPage * PAGE_SIZE + PAGE_SIZE);
 
   const patchStaff = (id: string, patch: Partial<StaffRow>) =>
     setStaff((s) => s.map((p) => (p.id === id ? { ...p, ...patch } : p)));
@@ -39,6 +53,7 @@ export function ProfilSection({
       });
       setStaff((s) => [...s, row]);
       notify(true, "Staf baru ditambahkan.", "add");
+      setPage(Math.ceil((staff.length + 1) / PAGE_SIZE) - 1);
     } catch {
       notify(false, "Gagal menambah staf.");
     }
@@ -102,51 +117,53 @@ export function ProfilSection({
       </PreviewCard>
 
       <PreviewCard title="Pratinjau — Perangkat Kelurahan">
-        <div className="grid grid-cols-2 gap-4 p-6 sm:grid-cols-3 sm:p-8 lg:grid-cols-5">
-          {staff.map((person) => (
-            <div
-              key={person.id}
-              className="relative flex flex-col overflow-hidden rounded-lg border border-border-default"
-            >
-              <EditableImage
-                photo={person.photo_url}
-                label="Foto staf"
-                onUpload={(file) => uploadStaffPhoto(person.id, file)}
-                className="h-[130px] w-full"
-                imgClassName="object-[center_25%]"
-              />
-              <div className="flex flex-col gap-1 p-3 text-center">
-                <EditableText
-                  as="div"
-                  value={person.name}
-                  onChange={(v) => saveStaff(person.id, { name: v })}
-                  className="text-[13px] font-semibold text-text-primary"
+        <div className="flex flex-col gap-5 p-6 sm:p-8">
+          <AddRowButton onClick={addStaff} label="Tambah staf" />
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {pagedStaff.map((person) => (
+              <div
+                key={person.id}
+                className="relative flex flex-col overflow-hidden rounded-lg border border-border-default"
+              >
+                <EditableImage
+                  photo={person.photo_url}
+                  label="Foto staf"
+                  onUpload={(file) => uploadStaffPhoto(person.id, file)}
+                  className="h-[130px] w-full"
+                  imgClassName="object-[center_25%]"
                 />
-                <EditableText
-                  as="div"
-                  value={person.role}
-                  onChange={(v) => saveStaff(person.id, { role: v })}
-                  className="text-xs font-medium text-ocean-700"
-                />
-                <EditableText
-                  as="div"
-                  value={person.nip ?? ""}
-                  onChange={(v) => saveStaff(person.id, { nip: v })}
-                  className="font-mono text-[10px] text-text-muted"
-                />
+                <div className="flex flex-1 flex-col gap-1 p-3 text-center">
+                  <EditableText
+                    as="div"
+                    value={person.name}
+                    onChange={(v) => saveStaff(person.id, { name: v })}
+                    className="min-h-[2.6em] text-center text-[13px] leading-snug font-semibold text-text-primary"
+                  />
+                  <EditableText
+                    as="div"
+                    value={person.role}
+                    onChange={(v) => saveStaff(person.id, { role: v })}
+                    className="min-h-[2.2em] text-center text-xs leading-snug font-medium text-ocean-700"
+                  />
+                  <div className="mt-auto pt-1 text-center font-mono text-[10px] leading-relaxed text-text-muted">
+                    <span className="font-semibold">NIP.</span>{" "}
+                    <EditableText
+                      as="span"
+                      value={stripNipPrefix(person.nip ?? "")}
+                      onChange={(v) =>
+                        saveStaff(person.id, { nip: v.trim() ? `NIP. ${v.trim()}` : "" })
+                      }
+                      placeholder="-"
+                    />
+                  </div>
+                </div>
+                <div className="absolute top-1.5 right-1.5">
+                  <DeleteIconButton onClick={() => removeStaff(person.id)} label="Hapus staf" />
+                </div>
               </div>
-              <div className="absolute top-1.5 right-1.5">
-                <DeleteIconButton onClick={() => removeStaff(person.id)} label="Hapus staf" />
-              </div>
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={addStaff}
-            className="flex min-h-[190px] flex-col items-center justify-center gap-1.5 rounded-lg border border-dashed border-border-strong text-text-secondary"
-          >
-            <span className="text-xs font-medium">+ Tambah staf</span>
-          </button>
+            ))}
+          </div>
+          <Pagination page={currentPage} pageCount={pageCount} onChange={setPage} />
         </div>
       </PreviewCard>
     </div>

@@ -266,22 +266,29 @@ export default function AdminPanel({
         </AnimatePresence>
 
         <div className="w-full max-w-[1000px] flex-1 box-border p-4 sm:p-8">
-          {activeSection === "dashboard" && <DashboardSection data={initialData} goTo={goTo} />}
-          {activeSection === "beranda" && (
+          {/* Every section stays mounted (just hidden) once visited, so its local
+           * edit state survives switching tabs instead of resetting to the stale
+           * server snapshot in `initialData` on remount. */}
+          <div className={activeSection === "dashboard" ? undefined : "hidden"}>
+            <DashboardSection data={initialData} goTo={goTo} />
+          </div>
+          <div className={activeSection === "beranda" ? undefined : "hidden"}>
             <BerandaSection
               content={initialData.content}
               heroSlides={initialData.heroSlides}
               notify={notify}
             />
-          )}
-          {activeSection === "profil" && (
+          </div>
+          <div className={activeSection === "profil" ? undefined : "hidden"}>
             <ProfilSection content={initialData.content} staff={initialData.staff} notify={notify} />
-          )}
-          {activeSection === "galeri" && (
+          </div>
+          <div className={activeSection === "galeri" ? undefined : "hidden"}>
             <GaleriSection gallery={initialData.gallery} notify={notify} />
-          )}
-          {activeSection === "berita" && <BeritaSection news={initialData.news} notify={notify} />}
-          {activeSection === "penduduk" && (
+          </div>
+          <div className={activeSection === "berita" ? undefined : "hidden"}>
+            <BeritaSection news={initialData.news} notify={notify} />
+          </div>
+          <div className={activeSection === "penduduk" ? undefined : "hidden"}>
             <PendudukSection
               population={initialData.population}
               rwAreas={initialData.rwAreas}
@@ -290,20 +297,20 @@ export default function AdminPanel({
               taxMonths={initialData.taxMonths}
               notify={notify}
             />
-          )}
-          {activeSection === "layanan" && (
+          </div>
+          <div className={activeSection === "layanan" ? undefined : "hidden"}>
             <LayananSection services={initialData.services} notify={notify} />
-          )}
-          {activeSection === "peta" && (
+          </div>
+          <div className={activeSection === "peta" ? undefined : "hidden"}>
             <PetaSection
               mapPoints={initialData.mapPoints}
               kelurahanBoundaries={initialData.kelurahanBoundaries}
               notify={notify}
             />
-          )}
-          {activeSection === "kontak" && (
+          </div>
+          <div className={activeSection === "kontak" ? undefined : "hidden"}>
             <KontakSection content={initialData.content} notify={notify} />
-          )}
+          </div>
         </div>
       </main>
     </div>

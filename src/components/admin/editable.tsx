@@ -84,12 +84,14 @@ export function EditableText({
       }}
       title="Klik untuk edit"
       className={cn(
-        "-mx-1 cursor-text rounded-sm px-1 break-words outline-dashed outline-1 outline-transparent transition-colors hover:bg-ocean-50/70 hover:outline-ocean-300",
+        "group relative -mx-1 cursor-text rounded-sm px-1 break-words outline-dashed outline-1 outline-transparent transition-colors hover:bg-ocean-50/70 hover:outline-ocean-300",
         className,
       )}
     >
       {value || <span className="text-text-muted italic">{placeholder ?? "Klik untuk isi"}</span>}
-      <Pencil className="ml-1.5 inline-block size-3 shrink-0 align-middle text-ocean-500 opacity-0 transition-opacity group-hover:opacity-100" />
+      {/* Absolutely positioned so the hover hint never widens the text box —
+       * kept in-flow it used to nudge centered text off-center. */}
+      <Pencil className="pointer-events-none absolute top-1/2 right-0.5 size-3 shrink-0 -translate-y-1/2 text-ocean-500 opacity-0 transition-opacity group-hover:opacity-100" />
     </Comp>
   );
 }
