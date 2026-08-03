@@ -1,6 +1,6 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
-import { Plus, Trash2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, Trash2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { updateContentBlock } from "@/lib/supabase/mutations";
 import type { ContentMap, Notify } from "./types";
@@ -131,6 +131,107 @@ export function TextField({
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
       />
+    </div>
+  );
+}
+
+/** Centered dialog — fill in a full form before creating something, instead
+ * of creating a blank placeholder row and editing it in place afterward. */
+export function Modal({
+  open,
+  onClose,
+  title,
+  children,
+}: {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  children: ReactNode;
+}) {
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4"
+      onClick={onClose}
+    >
+      <div
+        className="flex max-h-[90vh] w-full max-w-md flex-col overflow-hidden rounded-lg border border-border-default bg-surface-card shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between border-b border-border-default px-5 py-4">
+          <h3 className="m-0 text-base font-semibold text-text-primary">{title}</h3>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Tutup"
+            className="flex size-7 items-center justify-center rounded-sm text-text-muted hover:bg-surface-sunken hover:text-text-primary"
+          >
+            <X className="size-4" />
+          </button>
+        </div>
+        <div className="overflow-y-auto p-5">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+/** Page-number pagination, hidden entirely when everything fits on one page. */
+export function Pagination({
+  page,
+  pageCount,
+  onChange,
+}: {
+  page: number;
+  pageCount: number;
+  onChange: (page: number) => void;
+}) {
+  if (pageCount <= 1) return null;
+  return (
+    <div className="flex items-center justify-center gap-1.5 pt-1">
+      <button
+        type="button"
+        onClick={() => onChange(page - 1)}
+        disabled={page === 0}
+        aria-label="Halaman sebelumnya"
+        className="flex size-8 items-center justify-center rounded-sm border border-border-default text-text-secondary disabled:opacity-40"
+      >
+        <ChevronLeft className="size-4" />
+      </button>
+      {Array.from({ length: pageCount }, (_, i) => (
+        <button
+          key={i}
+          type="button"
+          onClick={() => onChange(i)}
+          aria-current={i === page}
+          className={cn(
+            "flex size-8 items-center justify-center rounded-sm text-[13px] font-medium",
+            i === page
+              ? "bg-ocean-600 text-white"
+              : "text-text-secondary hover:bg-surface-sunken",
+          )}
+        >
+          {i + 1}
+        </button>
+      ))}
+      <button
+        type="button"
+        onClick={() => onChange(page + 1)}
+        disabled={page === pageCount - 1}
+        aria-label="Halaman berikutnya"
+        className="flex size-8 items-center justify-center rounded-sm border border-border-default text-text-secondary disabled:opacity-40"
+      >
+        <ChevronRight className="size-4" />
+      </button>
     </div>
   );
 }

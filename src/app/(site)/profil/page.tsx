@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { PageHeader } from "@/components/site/page-header";
 import { DbImage } from "@/components/site/db-image";
 import { getContentBlocks, getStaff } from "@/lib/supabase/queries";
@@ -46,15 +45,14 @@ export default async function ProfilPage() {
         </p>
 
         <div className="overflow-x-auto rounded-lg border border-border-default bg-surface-card p-4 sm:p-8">
-          <Image
+          <DbImage
             src={
               content["profil.struktur_image_url"] ??
               "/images/Struktur/Struktur_Organisasi_Kelurahan.jpg"
             }
             alt="Bagan Struktur Organisasi Kelurahan Jagong"
-            width={1348}
-            height={531}
-            className="h-auto w-full min-w-[640px]"
+            fit="natural"
+            className="min-w-[640px]"
           />
         </div>
       </section>

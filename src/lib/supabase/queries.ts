@@ -77,11 +77,21 @@ export async function getRwAreas() {
   return data ?? [];
 }
 
-export async function getMapBoundaries() {
+export async function getMapPoints() {
   const supabase = await createClient();
   const { data } = await supabase
-    .from("map_boundaries")
-    .select("id, direction, neighbor_name");
+    .from("map_points")
+    .select("id, nama, category, deskripsi, photo_url, map_url, lat, lng")
+    .order("sort_order", { ascending: true });
+  return data ?? [];
+}
+
+export async function getKelurahanBoundaries() {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("kelurahan_boundaries")
+    .select("id, kel_desa, nama_lengkap, is_self, geometry")
+    .order("sort_order", { ascending: true });
   return data ?? [];
 }
 

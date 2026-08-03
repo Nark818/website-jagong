@@ -89,23 +89,80 @@ export type Database = {
         }
         Relationships: []
       }
-      map_boundaries: {
+      kelurahan_boundaries: {
         Row: {
-          direction: Database["public"]["Enums"]["boundary_direction"]
+          created_at: string
+          geometry: Json
           id: string
-          neighbor_name: string
+          is_self: boolean
+          kel_desa: string
+          kode_kd: string | null
+          nama_lengkap: string | null
+          sort_order: number
           updated_at: string
         }
         Insert: {
-          direction: Database["public"]["Enums"]["boundary_direction"]
+          created_at?: string
+          geometry: Json
           id?: string
-          neighbor_name: string
+          is_self?: boolean
+          kel_desa: string
+          kode_kd?: string | null
+          nama_lengkap?: string | null
+          sort_order?: number
           updated_at?: string
         }
         Update: {
-          direction?: Database["public"]["Enums"]["boundary_direction"]
+          created_at?: string
+          geometry?: Json
           id?: string
-          neighbor_name?: string
+          is_self?: boolean
+          kel_desa?: string
+          kode_kd?: string | null
+          nama_lengkap?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      map_points: {
+        Row: {
+          category: string
+          created_at: string
+          deskripsi: string | null
+          id: string
+          lat: number
+          lng: number
+          map_url: string | null
+          nama: string
+          photo_url: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          deskripsi?: string | null
+          id?: string
+          lat: number
+          lng: number
+          map_url?: string | null
+          nama: string
+          photo_url?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          deskripsi?: string | null
+          id?: string
+          lat?: number
+          lng?: number
+          map_url?: string | null
+          nama?: string
+          photo_url?: string | null
+          sort_order?: number
           updated_at?: string
         }
         Relationships: []
@@ -348,7 +405,6 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      boundary_direction: "utara" | "selatan" | "timur" | "barat"
       news_category: "berita" | "pengumuman"
     }
     CompositeTypes: {
@@ -477,7 +533,6 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      boundary_direction: ["utara", "selatan", "timur", "barat"],
       news_category: ["berita", "pengumuman"],
     },
   },

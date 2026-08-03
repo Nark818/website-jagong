@@ -34,6 +34,6 @@ export const SECTION_NOTES: Record<SectionKey, string> = {
   berita: "Kelola daftar berita dan pengumuman yang tampil di Beranda dan halaman Berita.",
   penduduk: "Statistik penduduk, data RW, dan realisasi pajak yang tampil di halaman Data Penduduk.",
   layanan: "Jenis surat dan syarat yang tampil di halaman Layanan Publik.",
-  peta: "Nama kelurahan tetangga per arah mata angin di halaman Peta Kelurahan.",
+  peta: "Titik lokasi (fasilitas, RT/RW) dan label kelurahan tetangga yang tampil di peta interaktif halaman Peta Kelurahan.",
   kontak: "Alamat, email, dan jam layanan yang tampil di footer setiap halaman.",
 };

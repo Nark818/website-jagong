@@ -2,7 +2,8 @@ import type {
   getContentBlocks,
   getGalleryItems,
   getHeroSlides,
-  getMapBoundaries,
+  getKelurahanBoundaries,
+  getMapPoints,
   getNewsPosts,
   getPopulationSnapshot,
   getRwAreas,
@@ -19,7 +20,8 @@ export type GalleryRow = Awaited<ReturnType<typeof getGalleryItems>>[number];
 export type NewsRow = Awaited<ReturnType<typeof getNewsPosts>>[number];
 export type PopulationRow = Awaited<ReturnType<typeof getPopulationSnapshot>>;
 export type RwRow = Awaited<ReturnType<typeof getRwAreas>>[number];
-export type BoundaryRow = Awaited<ReturnType<typeof getMapBoundaries>>[number];
+export type MapPointRow = Awaited<ReturnType<typeof getMapPoints>>[number];
+export type KelurahanBoundaryRow = Awaited<ReturnType<typeof getKelurahanBoundaries>>[number];
 export type ServiceRow = Awaited<ReturnType<typeof getServiceTypes>>[number];
 export type TaxTargetRow = Awaited<ReturnType<typeof getTaxYearTarget>>;
 export type TaxMonthRow = Awaited<ReturnType<typeof getTaxMonthlyRealizations>>[number];
@@ -32,7 +34,8 @@ export type AdminInitialData = {
   news: NewsRow[];
   population: PopulationRow;
   rwAreas: RwRow[];
-  boundaries: BoundaryRow[];
+  mapPoints: MapPointRow[];
+  kelurahanBoundaries: KelurahanBoundaryRow[];
   services: ServiceRow[];
   taxYear: number;
   taxTarget: TaxTargetRow;

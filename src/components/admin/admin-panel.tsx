@@ -295,7 +295,11 @@ export default function AdminPanel({
             <LayananSection services={initialData.services} notify={notify} />
           )}
           {activeSection === "peta" && (
-            <PetaSection boundaries={initialData.boundaries} notify={notify} />
+            <PetaSection
+              mapPoints={initialData.mapPoints}
+              kelurahanBoundaries={initialData.kelurahanBoundaries}
+              notify={notify}
+            />
           )}
           {activeSection === "kontak" && (
             <KontakSection content={initialData.content} notify={notify} />

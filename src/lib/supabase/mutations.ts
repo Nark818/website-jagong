@@ -244,10 +244,31 @@ export async function deleteServiceType(id: string) {
   if (error) throw error;
 }
 
-// ---- map_boundaries -------------------------------------------------------------
+// ---- map_points -------------------------------------------------------------
 
-export async function updateMapBoundary(id: string, neighbor_name: string) {
+export async function createMapPoint(input: TablesInsert<"map_points">) {
   const supabase = createClient();
-  const { error } = await supabase.from("map_boundaries").update({ neighbor_name }).eq("id", id);
+  const { data, error } = await supabase.from("map_points").insert(input).select().single();
+  if (error) throw error;
+  return data;
+}
+
+export async function updateMapPoint(id: string, patch: TablesUpdate<"map_points">) {
+  const supabase = createClient();
+  const { error } = await supabase.from("map_points").update(patch).eq("id", id);
+  if (error) throw error;
+}
+
+export async function deleteMapPoint(id: string) {
+  const supabase = createClient();
+  const { error } = await supabase.from("map_points").delete().eq("id", id);
+  if (error) throw error;
+}
+
+// ---- kelurahan_boundaries -----------------------------------------------------
+
+export async function updateKelurahanBoundaryLabel(id: string, kel_desa: string) {
+  const supabase = createClient();
+  const { error } = await supabase.from("kelurahan_boundaries").update({ kel_desa }).eq("id", id);
   if (error) throw error;
 }
