@@ -1,7 +1,7 @@
 "use client";
 
 import "leaflet/dist/leaflet.css";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import L from "leaflet";
 import { MapContainer, TileLayer, Marker, Popup, Polygon, Tooltip, useMap } from "react-leaflet";
 import { ExternalLink } from "lucide-react";
@@ -54,6 +54,20 @@ export function PetaMap({ points, boundaries }: { points: MapPoint[]; boundaries
   const [activeCategories, setActiveCategories] = useState<Set<string>>(
     () => new Set(MAP_CATEGORIES.map((c) => c.value)),
   );
+
+  // Popup opens on hover instead of click. A short close delay bridges the
+  // gap between marker and popup so moving the cursor onto the popup (e.g.
+  // to click the Google Maps link) doesn't close it first.
+  const markerRefs = useRef<Record<string, L.Marker | null>>({});
+  const closeTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+
+  const openPopupFor = (id: string) => {
+    clearTimeout(closeTimers.current[id]);
+    markerRefs.current[id]?.openPopup();
+  };
+  const scheduleClosePopupFor = (id: string) => {
+    closeTimers.current[id] = setTimeout(() => markerRefs.current[id]?.closePopup(), 200);
+  };
 
   const toggleCategory = (value: string) => {
     setActiveCategories((prev) => {
@@ -130,9 +144,24 @@ export function PetaMap({ points, boundaries }: { points: MapPoint[]; boundaries
           ))}
 
           {visiblePoints.map((point) => (
-            <Marker key={point.id} position={[point.lat, point.lng]} icon={categoryIcon(point.category)}>
-              <Popup minWidth={220} maxWidth={260}>
-                <div className="flex flex-col gap-2">
+            <Marker
+              key={point.id}
+              ref={(el) => {
+                markerRefs.current[point.id] = el;
+              }}
+              position={[point.lat, point.lng]}
+              icon={categoryIcon(point.category)}
+              eventHandlers={{
+                mouseover: () => openPopupFor(point.id),
+                mouseout: () => scheduleClosePopupFor(point.id),
+              }}
+            >
+              <Popup minWidth={220} maxWidth={260} autoPan={false} closeButton={false}>
+                <div
+                  onMouseEnter={() => clearTimeout(closeTimers.current[point.id])}
+                  onMouseLeave={() => scheduleClosePopupFor(point.id)}
+                  className="flex flex-col gap-2"
+                >
                   <DbImage
                     src={point.photo_url}
                     alt={point.nama}
