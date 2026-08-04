@@ -23,7 +23,7 @@ export default async function ProfilPage() {
               Sejarah Kelurahan
             </h2>
             <p className="text-justify text-[18px] leading-[1.75] text-text-secondary">
-              {content["sejarah.body_1"] ??
+              {content["sejarah.body_1"] ||
                 "Kelurahan Jagong merupakan salah satu kelurahan yang berada di Kecamatan Pangkajene, Kabupaten Pangkajene dan Kepulauan, Provinsi Sulawesi Selatan."}
             </p>
           </div>
@@ -47,7 +47,7 @@ export default async function ProfilPage() {
         <div className="overflow-x-auto rounded-lg border border-border-default bg-surface-card p-4 sm:p-8">
           <DbImage
             src={
-              content["profil.struktur_image_url"] ??
+              content["profil.struktur_image_url"] ||
               "/images/Struktur/Struktur_Organisasi_Kelurahan.jpg"
             }
             alt="Bagan Struktur Organisasi Kelurahan Jagong"

@@ -61,22 +61,22 @@ export async function Footer() {
             <div className="flex items-start gap-2.5">
               <MapPin className="mt-0.5 size-4 shrink-0 text-ocean-300" />
               <span className="text-sm leading-relaxed text-ocean-100">
-                {content["contact.address"] ??
+                {content["contact.address"] ||
                   "Jl. Pelelangan, Kel. Jagong, Kec. Pangkep, Sulawesi Selatan"}
               </span>
             </div>
             <div className="flex items-center gap-2.5">
               <Mail className="size-4 shrink-0 text-ocean-300" />
               <span className="text-sm text-ocean-100">
-                {content["contact.email"] ?? "jagong2025@g.mail"}
+                {content["contact.email"] || "jagong2025@gmail.com"}
               </span>
             </div>
             <div className="flex items-start gap-2.5">
               <Clock className="mt-0.5 size-4 shrink-0 text-ocean-300" />
               <span className="text-sm leading-relaxed text-ocean-100">
-                {content["contact.hours_weekday"] ?? "Senin–Kamis, 08.00–16.00 WITA"}
+                {content["contact.hours_weekday"] || "Senin–Kamis, 08.00–16.00 WITA"}
                 <br />
-                {content["contact.hours_friday"] ?? "Jumat, 08.00–16.30 WITA"}
+                {content["contact.hours_friday"] || "Jumat, 08.00–16.30 WITA"}
               </span>
             </div>
           </div>

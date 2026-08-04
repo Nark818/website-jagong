@@ -84,9 +84,9 @@ export default async function LayananPublikPage() {
             <div className="flex items-start gap-2.5">
               <Clock className="mt-0.5 size-[15px] shrink-0 text-ocean-600" />
               <span className="text-[13px] leading-relaxed text-text-secondary">
-                {content["contact.hours_weekday"] ?? "Senin–Kamis, 08.00–16.00 WITA"}
+                {content["contact.hours_weekday"] || "Senin–Kamis, 08.00–16.00 WITA"}
                 <br />
-                {content["contact.hours_friday"] ?? "Jumat, 08.00–16.30 WITA"}
+                {content["contact.hours_friday"] || "Jumat, 08.00–16.30 WITA"}
               </span>
             </div>
           </div>

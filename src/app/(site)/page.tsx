@@ -100,10 +100,10 @@ export default async function Home() {
             Situs Resmi Pemerintah Kelurahan
           </span>
           <h1 className="m-0 max-w-[18ch] text-[clamp(34px,5.5vw,56px)] leading-[1.1] font-semibold text-white">
-            {content["hero.title"] ?? "Kelurahan Jagong, Kecamatan Pangkajene"}
+            {content["hero.title"] || "Kelurahan Jagong, Kecamatan Pangkajene"}
           </h1>
           <p className="m-0 max-w-[56ch] text-[clamp(16px,2vw,19px)] leading-relaxed text-white/90">
-            {content["hero.subtitle"] ??
+            {content["hero.subtitle"] ||
               "Melayani warga dengan transparan, cepat, dan terpercaya. Informasi kelurahan, data kependudukan, dan layanan publik dalam satu tempat."}
           </p>
           <div className="mt-2 flex flex-wrap gap-3 pointer-events-auto">
@@ -155,14 +155,14 @@ export default async function Home() {
               Sambutan
             </span>
             <h2 className="mt-3 mb-4 text-[clamp(26px,3.5vw,34px)] text-text-primary">
-              {content["sambutan.title"] ?? "Selamat datang di Kelurahan Jagong"}
+              {content["sambutan.title"] || "Selamat datang di Kelurahan Jagong"}
             </h2>
             <p className="mb-3 text-justify text-[18px] leading-[1.7] text-text-secondary">
-              {content["sambutan.body_1"] ??
+              {content["sambutan.body_1"] ||
                 "Kami berkomitmen menghadirkan pemerintahan kelurahan yang terbuka dan mudah diakses oleh seluruh warga, kapan pun dibutuhkan."}
             </p>
             <p className="text-justify text-[18px] leading-[1.7] text-text-secondary">
-              {content["sambutan.body_2"] ??
+              {content["sambutan.body_2"] ||
                 "Melalui situs ini, warga dapat mengakses informasi kelurahan, data kependudukan, dan mengajukan surat layanan tanpa harus menunggu lama di kantor kelurahan."}
             </p>
             {lurah && (
