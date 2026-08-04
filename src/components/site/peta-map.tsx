@@ -110,8 +110,9 @@ export function PetaMap({ points, boundaries }: { points: MapPoint[]; boundaries
       </div>
 
       {/* isolate: Leaflet gives its controls/panes a z-index up to 1000 —
-       * without a stacking context here, that escapes above the sticky nav. */}
-      <div className="isolate h-[520px] w-full overflow-hidden rounded-xl border border-border-default sm:h-[600px]">
+       * without a stacking context here, that escapes above the sticky nav.
+       * relative: anchors the legend overlay below to this box. */}
+      <div className="isolate relative h-[520px] w-full overflow-hidden rounded-xl border border-border-default sm:h-[600px]">
         <MapContainer center={[-4.8376, 119.5341]} zoom={16} scrollWheelZoom className="size-full">
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -199,6 +200,48 @@ export function PetaMap({ points, boundaries }: { points: MapPoint[]; boundaries
             </Marker>
           ))}
         </MapContainer>
+
+        {/* z-[1000]: matches Leaflet's own control layer so it sits above the
+         * tiles/vector panes; pointer-events-none lets map drag/zoom pass through. */}
+        <div className="pointer-events-none absolute top-3 right-3 z-[1000] max-w-[180px] rounded-lg border border-border-default bg-surface-card/95 p-3 shadow-md backdrop-blur-sm">
+          <h3 className="m-0 mb-2 text-[10px] font-semibold tracking-wide text-text-muted uppercase">
+            Legenda
+          </h3>
+          <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col gap-1">
+              <span className="text-[10px] font-medium text-text-muted">Batas Wilayah</span>
+              <div className="flex items-center gap-1.5 text-[11px] text-text-secondary">
+                <span
+                  className="h-0 w-5 shrink-0 border-t-[3px]"
+                  style={{ borderColor: SELF_COLOR }}
+                />
+                Kelurahan Jagong
+              </div>
+              <div className="flex items-center gap-1.5 text-[11px] text-text-secondary">
+                <span
+                  className="h-0 w-5 shrink-0 border-t-2 border-dashed"
+                  style={{ borderColor: NEIGHBOR_COLOR }}
+                />
+                Tetangga
+              </div>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-[10px] font-medium text-text-muted">Kategori Lokasi</span>
+              {MAP_CATEGORIES.map((cat) => (
+                <div
+                  key={cat.value}
+                  className="flex items-center gap-1.5 text-[11px] text-text-secondary"
+                >
+                  <span
+                    className="size-2 shrink-0 rounded-full"
+                    style={{ backgroundColor: cat.color }}
+                  />
+                  {cat.label}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
