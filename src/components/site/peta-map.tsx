@@ -109,7 +109,9 @@ export function PetaMap({ points, boundaries }: { points: MapPoint[]; boundaries
         })}
       </div>
 
-      <div className="h-[520px] w-full overflow-hidden rounded-xl border border-border-default sm:h-[600px]">
+      {/* isolate: Leaflet gives its controls/panes a z-index up to 1000 —
+       * without a stacking context here, that escapes above the sticky nav. */}
+      <div className="isolate h-[520px] w-full overflow-hidden rounded-xl border border-border-default sm:h-[600px]">
         <MapContainer center={[-4.8376, 119.5341]} zoom={16} scrollWheelZoom className="size-full">
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
