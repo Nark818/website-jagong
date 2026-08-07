@@ -39,7 +39,7 @@ const QUICK_LINKS = [
   {
     href: "/layanan-publik",
     label: "Layanan Publik",
-    desc: "Ajukan surat keterangan secara daring",
+    desc: "Cek syarat pembuatan surat keterangan",
     icon: FileText,
     tone: "forest" as const,
   },
@@ -163,7 +163,7 @@ export default async function Home() {
             </p>
             <p className="text-justify text-[18px] leading-[1.7] text-text-secondary">
               {content["sambutan.body_2"] ||
-                "Melalui situs ini, warga dapat mengakses informasi kelurahan, data kependudukan, dan mengajukan surat layanan tanpa harus menunggu lama di kantor kelurahan."}
+                "Melalui situs ini, warga dapat mengakses informasi kelurahan, data kependudukan, dan mengecek syarat-syarat pembuatan surat sebelum datang langsung ke kantor kelurahan."}
             </p>
             {lurah && (
               <div className="mt-6 flex items-center gap-3.5">

@@ -22,13 +22,40 @@ const plexMono = IBM_Plex_Mono({
 
 const siteUrl = "https://kelurahanjagong.vercel.app";
 const siteName = "Website Kelurahan Jagong";
+// Short brand name for the site-name chip Google shows next to the URL in
+// search results. Kept distinct from `siteName` (the full <title>) because
+// on a *.vercel.app domain Google otherwise tends to fall back to showing
+// "Vercel" there unless structured data spells out the real brand name.
+const siteBrand = "Kelurahan Jagong";
 const siteDescription =
   "Situs resmi Pemerintah Kelurahan Jagong, Kecamatan Pangkajene, Kabupaten Pangkep, Sulawesi Selatan. Profil, berita, layanan publik, data penduduk, dan peta kelurahan.";
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteBrand,
+    url: siteUrl,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "GovernmentOrganization",
+    name: siteBrand,
+    url: siteUrl,
+    logo: `${siteUrl}/images/Logo/Logo_Kelurahan_Jagong.png`,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Pangkajene",
+      addressRegion: "Sulawesi Selatan",
+      addressCountry: "ID",
+    },
+  },
+];
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${siteName} - Situs Resmi Pemerintah Kelurahan Jagong`,
+    default: siteName,
     template: `%s | ${siteName}`,
   },
   description: siteDescription,
@@ -49,7 +76,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "id_ID",
     url: siteUrl,
-    siteName,
+    siteName: siteBrand,
     title: siteName,
     description: siteDescription,
     images: [{ url: "/images/Logo/Logo_Kelurahan_Jagong.png" }],
@@ -72,7 +99,13 @@ export default function RootLayout({
       lang="id"
       className={`${lora.variable} ${workSans.variable} ${plexMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

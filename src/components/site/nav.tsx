@@ -12,7 +12,7 @@ type NavGroup = { label: string; children: NavLink[] };
 type NavEntry = NavLink | NavGroup;
 
 const NAV_ITEMS: NavEntry[] = [
-  { href: "/", label: "Beranda" },
+  { href: "/", label: "Beranda" } ,
   {
     label: "Profil Kelurahan",
     children: [
@@ -110,7 +110,7 @@ export function Nav({ isAdmin }: { isAdmin: boolean }) {
                     "whitespace-nowrap rounded-full px-4 py-2 text-[13.5px] no-underline transition-all duration-300 ease-out",
                     active
                       ? "bg-gradient-to-r from-ocean-600 to-ocean-500 font-semibold text-white shadow-sm shadow-ocean-600/25"
-                      : "font-normal text-text-secondary hover:-translate-y-0.5 hover:bg-gradient-to-r hover:from-ocean-50 hover:to-forest-50 hover:text-ocean-700 hover:shadow-sm",
+                      : "font-normal  text-text-secondary hover:-translate-y-0.5 hover:bg-gradient-to-r hover:from-ocean-50 hover:to-forest-50 hover:text-ocean-700 hover:shadow-sm",
                   )}
                 >
                   {item.label}
